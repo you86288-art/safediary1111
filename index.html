@@ -805,16 +805,37 @@ const mkey = k => k.slice(0,7);
 const dnum = k => k.slice(8);
 
 /* ══════════════ 저장소 ══════════════ */
-const hasStore = typeof window.storage !== "undefined";
+/* 저장소 3단 폴백: Claude 아티팩트 → 브라우저(localStorage) → 메모리 */
 const mem = {};
+const STORE = (()=>{
+  try{ if(typeof window.storage !== "undefined" && window.storage) return "claude"; }catch(e){}
+  try{
+    const k="__smos_test__";
+    window.localStorage.setItem(k,"1");
+    window.localStorage.removeItem(k);
+    return "local";
+  }catch(e){}
+  return "mem";
+})();
+const hasStore = STORE !== "mem";
+const STORE_LABEL = {claude:"Claude 대화에 저장", local:"이 브라우저에 저장", mem:"임시 — 새로고침 시 사라짐"}[STORE];
+const LK = k => "smos:" + k;
 async function sGet(k){
-  if(!hasStore){ return mem[k] ?? null; }
+  if(STORE==="mem") return mem[k] ?? null;
+  if(STORE==="local"){
+    try{ const v = localStorage.getItem(LK(k)); return v ? JSON.parse(v) : null; }
+    catch(e){ return null; }
+  }
   try{ const r = await window.storage.get(k); return r ? JSON.parse(r.value) : null; }
   catch(e){ return null; }
 }
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
 async function sSet(k,v){
-  if(!hasStore){ mem[k]=v; return true; }
+  if(STORE==="mem"){ mem[k]=v; return true; }
+  if(STORE==="local"){
+    try{ localStorage.setItem(LK(k), JSON.stringify(v)); return true; }
+    catch(e){ console.error("local save failed:",k,e); return false; }
+  }
   for(let attempt=1; attempt<=3; attempt++){
     try{
       const r = await window.storage.set(k, JSON.stringify(v));
@@ -831,7 +852,17 @@ async function sSet(k,v){
 function setState(t,cls){ const el=document.getElementById("saveState"); el.textContent=t; el.style.color = cls||"var(--ink3)"; }
 
 async function sList(prefix){
-  if(!hasStore) return Object.keys(mem).filter(k=>k.startsWith(prefix));
+  if(STORE==="mem") return Object.keys(mem).filter(k=>k.startsWith(prefix));
+  if(STORE==="local"){
+    const out=[];
+    try{
+      for(let i=0;i<localStorage.length;i++){
+        const raw = localStorage.key(i);
+        if(raw && raw.startsWith("smos:"+prefix)) out.push(raw.slice(5));
+      }
+    }catch(e){}
+    return out;
+  }
   try{
     const r = await window.storage.list(prefix);
     if(!r || !r.keys) return [];
@@ -1596,7 +1627,8 @@ function renderStStatus(){
   const ok = hasStore;
   el.innerHTML = `<div class="card ${ok?"proto":"warnbox"}">
     <span class="lab">저장 상태</span>
-    <b>${ok?"✔ 저장됨 — 이 대화 안에서 계속 유지돼":"⚠ 임시 모드 — 새로고침하면 사라져"}</b>
+    <b>${STORE==="claude" ? "✔ Claude 대화에 저장됨" : STORE==="local" ? "✔ 이 브라우저에 저장됨" : "⚠ 임시 모드 — 새로고침하면 사라져"}</b>
+    ${STORE==="local"?`<div style="margin-top:6px;font-size:13px;color:var(--ink2)">기기·브라우저마다 따로 저장돼. 폰과 노트북은 별개고, 브라우저 데이터를 지우면 함께 지워져. <b>그래서 주 1회 내보내기가 진짜 백업이야.</b></div>`:""}
     <div style="height:8px"></div>
     기록한 날 <b>${days}일</b> · 낫셀프 <b>${notself}</b> · 아이디어 <b>${ideas.length}</b> ·
     동시성 <b>${syncs.length}</b> · 담아둔 문장 <b>${kept.length}</b> · 주기 <b>${(cycle.starts||[]).length}</b>
@@ -1657,7 +1689,7 @@ document.getElementById("impBtn").onclick = ()=>{
   selDay = keyOf(new Date()); renderDayDetail(); renderCal();
   buildFolds();
   ready = true;
-  setState(hasStore ? "준비됨" : "임시 모드 · 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--mustard)");
+  setState(hasStore ? "준비됨 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
 })();
 </script>
 </body>
