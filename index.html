@@ -15,7 +15,7 @@
 <title>SAFE MODE OS · 운영 워크북</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v2.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v2.4.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root{
@@ -184,6 +184,19 @@ input.line{width:100%;border:none;border-bottom:1px dotted var(--ink3);backgroun
 .bigbtn{width:100%;padding:13px;border-radius:3px;font-weight:700;font-size:15px;color:#fff;background:var(--ink)}
 .bigbtn.sage{background:var(--sage)} .bigbtn.mus{background:var(--mustard)} .bigbtn.burg{background:var(--burg)}
 
+.slrow{display:flex;align-items:center;gap:11px;margin-top:8px}
+.slrow span{font-size:12.5px;font-weight:700;color:var(--ink2);flex:none;width:32px}
+.slrow input[type=range]{flex:1;accent-color:var(--mustard)}
+.slrow b{font-family:var(--mono);font-size:15px;width:22px;text-align:right;flex:none}
+.q3{background:var(--panel);border-radius:3px;padding:12px 13px;font-family:var(--serif);font-size:15px;line-height:1.9}
+.q3 small{display:block;font-family:var(--sans);font-size:12.5px;color:var(--ink2);margin-top:8px;line-height:1.6}
+.relhint{font-size:13px;color:var(--ink2);line-height:1.65;margin-top:9px;min-height:1px}
+.relhint b{color:var(--cobalt)}
+.wbar-root{display:grid;grid-template-columns:52px 1fr 30px;gap:10px;align-items:center;font-size:13.5px;margin-bottom:9px}
+.wbar-root .nm{font-weight:700}
+.wbar-root .bar2{height:9px;background:var(--rule);border-radius:5px;overflow:hidden}
+.wbar-root .bar2 i{display:block;height:100%;background:var(--mustard);border-radius:5px}
+.wbar-root .v{font-family:var(--mono);font-size:12px;text-align:right;color:var(--ink2)}
 .rel{border:1.4px dashed var(--mustard);background:#fff;border-radius:4px;padding:16px}
 .rel textarea{width:100%;border:none;outline:none;resize:vertical;min-height:78px;font-size:15.5px;font-family:var(--serif);line-height:1.6;background:transparent}
 .rel.go textarea{opacity:0;transform:translateY(-26px) rotate(-1.5deg);transition:.85s ease}
@@ -315,7 +328,7 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
 <header class="top">
   <div>
-    <div class="brand">SAFE MODE OS <span style="color:var(--cobalt)">v2.3</span></div>
+    <div class="brand">SAFE MODE OS <span style="color:var(--cobalt)">v2.4</span></div>
     <div id="hostTag" class="hosttag"></div>
     <h1 id="hdate">—</h1>
   </div>
@@ -804,18 +817,70 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
   </div>
   <p class="muted" style="margin-top:9px">한 번에 하나만. 다 읽는 게 목적이 아니야. 하나가 몸에 닿으면 거기서 멈춰.</p>
 
-  <h2 class="sec">놓기</h2>
+  <h2 class="sec">놓기 · 뿌리<span class="cnt" id="cRel"></span></h2>
   <div class="rel" id="relBox">
-    <span class="lab">지금 움켜쥐고 있는 것 하나</span>
-    <textarea id="relTx" placeholder="증명하려는 것 · 붙잡고 있는 것 · 확인받고 싶은 것"></textarea>
+    <span class="lab">1 · 지금 몸 어디에 있어?</span>
+    <div class="addrow" style="margin-bottom:4px">
+      <input id="relWhere" placeholder="가슴 · 명치 · 목 · 배 — 한 단어">
+    </div>
+    <div class="slrow"><span>강도</span><input type="range" id="relB" min="0" max="10" value="5"><b id="relBv">5</b></div>
+
+    <span class="lab" style="margin-top:14px">2 · 무엇을 움켜쥐고 있어?</span>
+    <textarea id="relTx" placeholder="적기만 해. 이 칸은 저장되지 않아."></textarea>
     <div class="puff" id="relPuff">…흘려보냈다</div>
-    <button class="bigbtn mus" id="relBtn" style="margin-top:8px">툭 던진다</button>
+
+    <span class="lab" style="margin-top:14px">3 · 세 질문 — 소리 내어</span>
+    <div class="q3">
+      <div>① 이걸 놓아버릴 수 있는가?</div>
+      <div>② 놓아버리겠는가?</div>
+      <div>③ 언제? — <b>지금.</b></div>
+      <small>답의 내용은 중요하지 않아. 질문을 던지는 행위 자체가 작동해.</small>
+    </div>
+
+    <span class="lab" style="margin-top:14px">4 · 이 밑에 있는 건 어느 뿌리야?</span>
+    <div class="seg sm" id="relWant">
+      <button data-v="통제">통제</button><button data-v="인정">인정</button>
+      <button data-v="안전">안전</button><button data-v="분리">분리</button>
+    </div>
+    <div id="relHint" class="relhint"></div>
+
+    <span class="lab" style="margin-top:14px">5 · 지금 강도는?</span>
+    <div class="slrow"><span>다시</span><input type="range" id="relA" min="0" max="10" value="5"><b id="relAv">5</b></div>
+
+    <button class="bigbtn mus" id="relBtn" style="margin-top:14px">놓고 기록하기</button>
     <div class="relcount" id="relCount">—</div>
   </div>
+
   <div class="card warnbox" style="margin-top:12px">
-    <span class="lab">이 기능만 저장하지 않는다</span>
-    적은 내용은 <b>어디에도 남지 않아.</b> 다시 꺼내볼 수 없어.<br>
-    나중에 확인할 수 있으면 그건 놓은 게 아니라 보관한 거니까. 횟수만 세.
+    <span class="lab">내용은 저장하지 않아</span>
+    적은 글은 <b>어디에도 남지 않아.</b> 남는 건 <b>뿌리 욕구와 강도 변화</b>뿐이야.<br>
+    나중에 꺼내볼 수 있으면 그건 놓은 게 아니라 보관한 거니까.
+  </div>
+
+  <h2 class="sec">내 주 패턴</h2>
+  <div id="relStats"></div>
+
+  <h2 class="sec">안 놓아질 때</h2>
+  <div class="card proto">
+    <span class="lab">저항 놓기 — 가장 자주 쓰게 될 도구</span>
+    <b>놓아지지 않을 때, 놓으려는 노력을 놓는다.</b>
+    <div style="height:9px"></div>
+    ① "지금 바꾸고 싶어 하는 마음이 있나?" → 그것을 놓는다<br>
+    ② 저항을 없애려 말고 <b>저항을 환영</b>한다<br>
+    ③ "막혔다는 이 상태를 바꾸려는 노력을 놓을 수 있을까?"<br>
+    ④ 그래도 안 되면 — 오늘은 여기까지. <b>놓지 못한다는 사실을 놓는다.</b>
+  </div>
+  <div class="card">
+    <span class="lab">환영하기 — 저항이 셀 때</span>
+    감정을 몸에서 찾고 질감을 본다 (뜨겁다 · 조인다 · 무겁다 · 텅 비었다)<br>
+    속으로 — <b>"환영해. 여기 있어도 돼."</b><br>
+    저항이 남으면 그 저항도 환영한다 — <b>"환영하기 싫은 마음, 너도 환영해."</b>
+    <div style="height:9px"></div>
+    <span style="color:var(--ink2);font-size:13px">환영은 동의가 아니야. 문밖에서 밀고 당기는 힘을 그만두는 것뿐이야.</span>
+  </div>
+  <div class="core">
+    <span class="lab">진전을 재는 법</span>
+    <p class="big">좋은 날을 세지 마.<br><b>나쁜 날의 바닥이 올라갔는지를 봐.</b></p>
   </div>
 
   <h2 class="sec">68초 창조</h2>
@@ -988,7 +1053,7 @@ const pad = n => String(n).padStart(2,"0");
 const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const blank = () => ({energy:"",ns:"",todos:[{t:"",d:false},{t:"",d:false},{t:"",d:false}],
   next15:"",ck:{morning:[],day:[],night:[]},learned:"",tomorrow:"",notself:[],
-  dream:{t:"",sense:[],wake:"",recur:false},did:[],ns3:[],glim:[],out:[]});
+  dream:{t:"",sense:[],wake:"",recur:false},did:[],ns3:[],glim:[],out:[],rel:[]});
 
 let today = new Date();
 let cur = keyOf(today);            // 편집 중인 날짜
@@ -1608,33 +1673,43 @@ function openSignal(type){
 }
 
 document.getElementById("sosBtn").onclick = ()=>{
-  showModal(`
-    <h3>과부하 SOS</h3>
-    <p class="muted">분석하지 않는다. 세 줄만.</p>
-    <div class="step"><div class="q">① 지금 몸에서 뭐가 느껴져? — 한 단어</div>
-      <input class="line" id="s1" placeholder="예: 조임 / 멍함 / 뜨거움"></div>
-    <div class="step"><div class="q">② 지금 이 감정, 진짜 내 거야?</div>
-      <div class="seg" id="s2seg"><button data-v="내 것">내 것</button><button data-v="남의 것">남의 것 → 놓는다</button></div></div>
-    <div class="step"><div class="q">③ 오늘 딱 하나만 한다면? — 15분짜리</div>
-      <input class="line" id="s3" placeholder="딱 하나"></div>
-    <div class="card core" style="margin-top:6px"><span class="lab">RULE</span>
-      <p class="big">그 외 모든 제안·아이디어·정보는 <b>보류</b>.</p></div>
-    <button id="sosSave" style="background:var(--burg);color:#fff;padding:11px 20px;border-radius:3px;font-weight:700;width:100%">이걸로 오늘 확정</button>`);
-  let pick="";
-  document.querySelectorAll("#s2seg button").forEach(b=> b.onclick=()=>{
-    pick=b.dataset.v; document.querySelectorAll("#s2seg button").forEach(x=>x.classList.toggle("on",x===b));
-  });
+  showModal('<h3>90초 응급 프로토콜</h3>'
+   +'<p class="muted">분석하지 않는다. 없애려 하지 않는다. 8→5면 충분하다.</p>'
+   +'<div class="card proto"><span class="lab">1 · 몸</span>손을 가슴이나 명치에 올려. 고개를 살짝 숙여.'
+   +'<div class="slrow" style="margin-top:9px"><span>지금</span><input type="range" id="sB" min="0" max="10" value="7"><b id="sBv">7</b></div></div>'
+   +'<div class="card"><span class="lab">2 · 환영</span>'
+   +'<b style="font-family:var(--serif);font-size:16px">"환영해. 여기 있어도 돼."</b><br>'
+   +'<span style="color:var(--ink2);font-size:13px">동의가 아니야. 밀고 당기는 힘을 그만두는 것뿐이야.</span></div>'
+   +'<div class="card"><span class="lab">3 · 세 질문</span>'
+   +'<div class="q3">① 이걸 놓을 수 있는가?<br>② 놓겠는가?<br>③ 언제? — <b>지금.</b></div></div>'
+   +'<div class="card"><span class="lab">4 · 다시 재기</span>'
+   +'<div class="slrow"><span>지금</span><input type="range" id="sA" min="0" max="10" value="7"><b id="sAv">7</b></div>'
+   +'<div id="sAfter" style="margin-top:10px;font-size:13.5px;color:var(--ink2)"></div></div>'
+   +'<div class="card warnbox"><span class="lab">안 내려갔으면</span>'
+   +'<b>"이걸 바꾸려는 노력을 놓을 수 있을까?"</b><br>그 자책도 놓을 대상일 뿐이야.</div>'
+   +'<div class="card"><span class="lab">5 · 마무리</span>길게 내쉬는 숨 한 번. <b>어깨를 떨군다.</b> 끝.</div>'
+   +'<div class="step"><div class="q">오늘 딱 하나만 한다면? — 15분짜리</div>'
+   +'<input class="line" id="s3" placeholder="딱 하나"></div>'
+   +'<button id="sosSave" style="background:var(--burg);color:#fff;padding:11px 20px;border-radius:3px;font-weight:700;width:100%">이걸로 오늘 확정</button>');
+  const B=document.getElementById("sB"), A=document.getElementById("sA");
+  const upd=()=>{
+    document.getElementById("sBv").textContent=B.value;
+    document.getElementById("sAv").textContent=A.value;
+    const d=+B.value-+A.value;
+    document.getElementById("sAfter").innerHTML = d>0
+      ? '<b style="color:var(--sage)">'+d+'만큼 내려갔어.</b> 0을 목표로 하지 마. 이걸로 충분해.'
+      : (d===0 ? '아직 그대로면 아래 칸을 봐.' : '올라갔어도 괜찮아. 눌려 있던 게 드러나는 정상 과정이야.');
+  };
+  B.oninput=upd; A.oninput=upd; upd();
   document.getElementById("sosSave").onclick = ()=>{
-    const D = dayData(cur);
-    const one = document.getElementById("s3").value.trim();
-    D.notself.push({type:"SOS", note:`몸: ${document.getElementById("s1").value} / 감정: ${pick}`, time:new Date().toTimeString().slice(0,5)});
-    if(one){ D.todos = [{t:one,d:false},{t:"",d:false},{t:"",d:false}]; D.next15 = one; }
+    const D=dayData(cur), one=document.getElementById("s3").value.trim();
+    D.notself.push({type:"SOS", note:"강도 "+B.value+" → "+A.value, time:new Date().toTimeString().slice(0,5)});
+    if(one){ D.todos=[{t:one,d:false},{t:"",d:false},{t:"",d:false}]; D.next15=one; }
     D.energy = D.energy || "하";
-    putDay(cur,D); dirty=true; closeModal(); switchTab("today"); renderToday(); save();
+    putDay(cur,D); dirty=true; closeModal(); switchTab("today"); renderToday(); renderCal(); save();
     window.scrollTo({top:0,behavior:"smooth"});
   };
 };
-
 function showModal(html){ document.getElementById("mBody").innerHTML = html; document.getElementById("modal").classList.add("on"); }
 function closeModal(){ document.getElementById("modal").classList.remove("on"); }
 document.getElementById("mClose").onclick = closeModal;
@@ -1718,7 +1793,7 @@ window.addEventListener("beforeunload", e=>{ if(dirty){ e.preventDefault(); e.re
 /* ══════════════ 토글 (노션식) ══════════════ */
 let folds = {};
 const OPEN_DEFAULT = ["오늘 3가지","내보낸 것","오늘의 글리머","오늘 실행한 것","체크리스트","밤 · 닫는 시간","낫셀프 신호",
-  "01 · 운동","02 · 호흡 훈련","03 · 기분 좋은 행동","04 · 내 몸 돌봄","이번 주 균형"];
+  "01 · 운동","02 · 호흡 훈련","03 · 기분 좋은 행동","04 · 내 몸 돌봄","이번 주 균형","놓기 · 뿌리","내 주 패턴"];
 
 function buildFolds(){
   document.querySelectorAll("section.tab").forEach(sec=>{
@@ -1803,7 +1878,7 @@ function renderDayDetail(){
   const rt = rituals.filter(x=>x.date===selDay);
   const kp = kept.filter(x=>x.date===selDay);
   const nsColor = {안전:"var(--sage)",경계:"var(--mustard)",생존:"var(--burg)"}[D.ns] || "var(--ink3)";
-  const empty = !D.ns && !D.energy && !done.length && !D.notself.length && !sy.length && !rt.length && !D.learned && !(D.did||[]).length && !(D.ns3||[]).length && !(D.glim||[]).length && !(D.out||[]).length && !(D.dream&&(D.dream.t||"").trim());
+  const empty = !D.ns && !D.energy && !done.length && !D.notself.length && !sy.length && !rt.length && !D.learned && !(D.did||[]).length && !(D.ns3||[]).length && !(D.glim||[]).length && !(D.out||[]).length && !(D.rel||[]).length && !(D.dream&&(D.dream.t||"").trim());
 
   const row = (label, html) => html ? `<div class="dd"><span>${label}</span><div>${html}</div></div>` : "";
 
@@ -1822,6 +1897,7 @@ function renderDayDetail(){
     ${row("15분 첫 동작", D.next15?esc(D.next15):"")}
     ${row("내보낸 것 📤", (D.out||[]).length? (D.out||[]).map(x=>'<div class="ddt"><b style="color:'+(x.tag==="비즈니스"?"#2C4A7C":"#A9800A")+'">['+x.tag+']</b> '+esc(x.t)+'</div>').join(""):"")}
     ${row("글리머 🌤", (D.glim||[]).length? (D.glim||[]).map(x=>`<div class="ddt">${esc(x.t)}</div>`).join(""):"")}
+    ${row("놓기 뿌리", (D.rel||[]).length? (D.rel||[]).map(x=>'<div class="ddt"><b style="color:var(--mustard)">'+x.w+'</b> '+x.b+' → '+x.a+'</div>').join(""):"")}
     ${row("신경계 루틴", (D.ns3||[]).length? (D.ns3||[]).map(x=>`<div class="ddt"><b style="color:${NS3[x.c]?NS3[x.c].c:"var(--ink)"}">${x.c}</b> ${esc(x.t)}</div>`).join(""):"")}
     ${row("실행한 것", (D.did||[]).length? (D.did||[]).map(x=>`<div class="ddt">✔ ${esc(x.t)}<span style="color:var(--ink3);font-size:11px;margin-left:6px">${x.time||""}</span></div>`).join(""):"")}
     ${row("체크리스트", ck?`${ck} / ${CK.morning.length+CK.day.length+CK.night.length} 완료`:"")}
@@ -2045,22 +2121,79 @@ document.getElementById("declCard").onclick = ()=>{
   renderDecl();
 };
 
-function renderRel(){
-  document.getElementById("relCount").textContent = `이번까지 놓은 횟수 ${releases}회 · 내용은 저장되지 않음`;
+const WANTS = {
+  "통제":{d:"내 뜻대로 되어야 해 · 예상할 수 있어야 안심돼",
+    m:"계획 강박 · 완벽주의 · 조바심 · 타인 교정",
+    hd:"네 <b>완벽주의</b>와 <b>아이디어 동시 착수</b>가 여기서 나와."},
+  "인정":{d:"인정받아야 해 · 미움받으면 안 돼",
+    m:"눈치 · 거절 못 함 · 숫자 확인 · 성취 중독 · 비교",
+    hd:"이게 네 <b>미정의 하트 센터</b>야. 조회수에 자존감이 출렁이는 자리."},
+  "안전":{d:"살아남아야 해 · 잃으면 끝이야",
+    m:"돈 불안 · 최악 시나리오 · 과잉 방어 · 저축 강박",
+    hd:"<b>40년 생존모드</b>의 뿌리. 몸이 아직 안전을 못 느끼는 층."},
+  "분리":{d:"나는 다르다 · 혼자여야 안전하다",
+    m:"고립 · 냉소 · 우월감 혹은 열등감 · 연결 회피",
+    hd:"워크북 14장 <b>영적 우월감</b>이 정확히 이 자리야. 레븐슨이 가장 근본으로 본 층."}
+};
+let relWant = "";
+function relSetup(){
+  const B=document.getElementById("relB"), A=document.getElementById("relA");
+  if(B) B.oninput=()=>{ document.getElementById("relBv").textContent=B.value; };
+  if(A) A.oninput=()=>{ document.getElementById("relAv").textContent=A.value; };
+  document.querySelectorAll("#relWant button").forEach(b=>{
+    b.onclick=()=>{ relWant = relWant===b.dataset.v ? "" : b.dataset.v; renderRel(); };
+  });
+  const btn=document.getElementById("relBtn");
+  if(btn) btn.onclick = doRelease;
 }
-document.getElementById("relBtn").onclick = ()=>{
-  const box = document.getElementById("relBox"), ta = document.getElementById("relTx");
-  if(!ta.value.trim()) { ta.focus(); return; }
+function renderRel(){
+  document.querySelectorAll("#relWant button").forEach(b=> b.classList.toggle("on", b.dataset.v===relWant));
+  const h=document.getElementById("relHint");
+  if(h) h.innerHTML = relWant
+    ? '<b>'+relWant+'</b> — '+WANTS[relWant].d+'<br><span style="color:var(--ink3)">'+WANTS[relWant].m+'</span><br>'+WANTS[relWant].hd
+      +'<div style="height:7px"></div><b>대상이 아니라 이 마음 자체를 놓는다.</b> 통제를 포기하는 것과 통제하려는 욕구를 놓는 건 완전히 달라.'
+    : '<span style="color:var(--ink3)">가장 크게 반응하는 것 하나만 골라.</span>';
+  const D=dayData(cur); const n=(D.rel||[]).length;
+  setCount("cRel", n);
+  const c=document.getElementById("relCount");
+  if(c) c.textContent = n ? "오늘 "+n+"회전 · 내용은 저장되지 않음" : "내용은 저장되지 않음 · 뿌리와 강도만 남아";
+  renderRelStats();
+}
+function renderRelStats(){
+  const el=document.getElementById("relStats"); if(!el) return;
+  const all=[];
+  Object.values(months).forEach(M=>Object.values(M.days||{}).forEach(d=>{ (d.rel||[]).forEach(x=>all.push(x)); }));
+  const cnt={"통제":0,"인정":0,"안전":0,"분리":0};
+  let drop=0, dn=0;
+  all.forEach(x=>{ if(cnt[x.w]!==undefined) cnt[x.w]++; if(typeof x.b==="number"&&typeof x.a==="number"){ drop+=(x.b-x.a); dn++; } });
+  const total=all.length, max=Math.max(1,...Object.values(cnt));
+  const rows=Object.keys(WANTS).map(w=>'<div class="wbar-root"><span class="nm">'+w+'</span>'
+    +'<span class="bar2"><i style="width:'+(cnt[w]/max*100)+'%"></i></span>'
+    +'<span class="v">'+cnt[w]+'</span></div>').join("");
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
+  el.innerHTML='<div class="card"><span class="lab">누적 '+total+'회전</span>'+rows
+    +'<div style="margin-top:12px;padding-top:11px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink2)">'
+    +(total<5 ? '5회전쯤 쌓이면 네 주 패턴이 보이기 시작해.'
+      : '가장 자주 나온 뿌리는 <b style="color:var(--cobalt)">'+top[0]+'</b>이야. '+WANTS[top[0]].hd
+        +(dn?'<br>평균 강도 <b>'+(drop/dn).toFixed(1)+'</b>만큼 내려갔어.':''))
+    +'</div></div>';
+}
+function doRelease(){
+  const box=document.getElementById("relBox"), ta=document.getElementById("relTx");
+  if(!relWant){ document.getElementById("relHint").innerHTML='<b style="color:var(--burg)">뿌리를 하나 골라줘.</b>'; return; }
+  const bv=+document.getElementById("relB").value, av=+document.getElementById("relA").value;
   box.classList.add("go");
   setTimeout(()=>{
-    ta.value = "";
+    ta.value=""; document.getElementById("relWhere").value="";
     box.classList.remove("go");
-    document.getElementById("relPuff").style.display = "block";
+    document.getElementById("relPuff").style.display="block";
     setTimeout(()=>{ document.getElementById("relPuff").style.display="none"; }, 2200);
-    releases++; dirty=true; dirtyVault=true; renderRel(); save();
+    const D=dayData(cur); D.rel=D.rel||[];
+    D.rel.unshift({w:relWant, b:bv, a:av, time:new Date().toTimeString().slice(0,5)});
+    putDay(cur,D); dirty=true; releases++; dirtyVault=true;
+    relWant=""; renderRel(); renderDayDetail(); save();
   }, 850);
-};
-
+}
 let t68t = null, t68s = 0;
 function paint68(){
   const ph = T68.find(p=>t68s < p[0]) || T68[3];
@@ -2216,12 +2349,12 @@ document.getElementById("impBtn").onclick = ()=>{
   Object.entries(sanctuary).forEach(([k,val])=>{ const el=document.getElementById(k); if(el) el.value=val; });
   if(!cycle.starts || !cycle.starts.length) cycle = {starts:["2026-06-26","2026-07-23"], len:27};
   renderToday(); renderIdeas(); renderSyncs(); renderCyc(); renderPhase();
-  renderCal(); renderDecl(); renderRel(); renderRit(); renderBium(); renderKeep(); renderStStatus();
+  renderCal(); renderDecl(); renderRel(); renderRit(); renderBium(); renderKeep(); relSetup(); renderStStatus();
   selDay = keyOf(new Date()); renderDayDetail(); renderCal();
   buildFolds();
   renderWarn();
   ready = true;
-  setState(hasStore ? "v2.3 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
+  setState(hasStore ? "v2.4 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
 })();
 </script>
 </body>
