@@ -6,7 +6,7 @@
 <title>SAFE MODE OS · 운영 워크북</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.4.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root{
@@ -209,6 +209,13 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 .foldall{display:flex;justify-content:flex-end;margin:-4px 0 10px}
 .foldall button{font-size:12.5px;font-weight:600;color:var(--ink3);border:1px solid var(--rule);
   background:#fff;padding:5px 12px;border-radius:20px}
+.seg.sm button{padding:6px 12px;font-size:12.5px;border-radius:20px}
+.drec{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;cursor:pointer}
+.drec input{width:17px;height:17px;accent-color:var(--cobalt)}
+.cell .mk.dream{right:3px;top:14px}
+.dtags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.dtag{font-size:11px;font-weight:600;color:var(--ink2);background:var(--panel);padding:2px 7px;border-radius:9px}
+.dtag.w{background:#EEEEF7;color:#5A5E96}
 .ddbox{border:1.6px solid var(--ink);border-radius:4px;background:#fff;padding:15px 16px;margin-top:16px}
 .ddhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
   border-bottom:1.4px solid var(--ink);padding-bottom:10px;margin-bottom:4px}
@@ -274,7 +281,7 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
 <header class="top">
   <div>
-    <div class="brand">SAFE MODE OS <span style="color:var(--cobalt)">v1.2</span></div>
+    <div class="brand">SAFE MODE OS <span style="color:var(--cobalt)">v1.4</span></div>
     <h1 id="hdate">—</h1>
   </div>
   <div class="streak"><b id="streak">0</b>연속 기록일</div>
@@ -314,6 +321,31 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
       <span class="lab">PROTOCOL · 회복의 날</span>
       오늘 성과 목표는 <b>0</b>이야. 정리 · 입력 · 휴식 · 산책 · 필사.<br>
       가라앉는 날은 고장이 아니라 잉태기야. 죄책감 올라오면 즉시 차단.
+    </div>
+  </div>
+
+  <div class="card" id="dreamCard">
+    <span class="lab">🌙 간밤의 꿈 — 눈뜨자마자, 문장 아니어도 돼</span>
+    <textarea class="field" id="dTx" placeholder="장면 · 색 · 냄새 · 공기의 느낌… 단어만 던져도 돼"></textarea>
+    <div style="margin-top:11px">
+      <div class="muted" style="margin-bottom:6px">남아 있는 감각</div>
+      <div class="seg sm" id="dSense">
+        <button data-v="색">색</button><button data-v="냄새">냄새</button><button data-v="소리">소리</button>
+        <button data-v="촉감">촉감</button><button data-v="공기·압박">공기·압박</button>
+      </div>
+    </div>
+    <div style="margin-top:11px">
+      <div class="muted" style="margin-bottom:6px">깨어났을 때 몸 상태</div>
+      <div class="seg sm" id="dWake">
+        <button data-v="개운">개운</button><button data-v="무거움">무거움</button>
+        <button data-v="가위눌림">가위눌림</button><button data-v="눈물">눈물</button>
+      </div>
+    </div>
+    <label class="drec"><input type="checkbox" id="dRecur"><span>전에도 꾼 적 있는 꿈이야</span></label>
+    <div class="box proto" style="margin:12px 0 0">
+      <span class="lab">읽는 법</span>
+      해석하려 들지 마. <b>20-57 채널이 밤새 감정을 배출한 흔적</b>이야.<br>
+      "내 시스템이 밤새 청소를 마쳤구나" 하고 흘려보내면 돼.
     </div>
   </div>
 
@@ -377,6 +409,7 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
     <span><i style="background:var(--cobalt)"></i>완료한 3가지</span>
     <span>✨ 동시성</span>
     <span>⚡ 낫셀프 신호</span>
+    <span>🌙 꿈</span>
   </div>
   <div class="legend" style="border-top:1px solid var(--rule);padding-top:11px;margin-top:11px">
     <span><u style="background:#C2607A"></u>생리기 🩸</span>
@@ -487,6 +520,10 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
   <h2 class="sec">낫셀프 로그<span class="cnt" id="cNs"></span></h2>
   <div id="nsList"></div>
+
+  <h2 class="sec">꿈 일기<span class="cnt" id="cDream"></span></h2>
+  <p class="muted">캘린더에 🌙 로 표시돼. 쓰는 건 <b>오늘 탭 맨 위</b>에서.</p>
+  <div id="dreamList"></div>
 
   <h2 class="sec">동시성 노트<span class="cnt" id="cSync"></span></h2>
   <div class="card proto">
@@ -794,7 +831,8 @@ const BIUM = [{"th": "증명하지 않기", "t": "진짜 빛나는 사람은 자
 const pad = n => String(n).padStart(2,"0");
 const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const blank = () => ({energy:"",ns:"",todos:[{t:"",d:false},{t:"",d:false},{t:"",d:false}],
-  next15:"",ck:{morning:[],day:[],night:[]},learned:"",tomorrow:"",notself:[]});
+  next15:"",ck:{morning:[],day:[],night:[]},learned:"",tomorrow:"",notself:[],
+  dream:{t:"",sense:[],wake:"",recur:false}});
 
 let today = new Date();
 let cur = keyOf(today);            // 편집 중인 날짜
@@ -962,6 +1000,30 @@ function renderToday(){
   L.oninput = ()=>{ D.learned=L.value; putDay(cur,D); dirty=true; mark(); };
   T.oninput = ()=>{ D.tomorrow=T.value; putDay(cur,D); dirty=true; mark(); };
 
+  const DR = D.dream || (D.dream={t:"",sense:[],wake:"",recur:false});
+  const dt = document.getElementById("dTx");
+  if(dt){
+    dt.value = DR.t || "";
+    dt.oninput = ()=>{ DR.t = dt.value; putDay(cur,D); dirty=true; mark(); };
+    document.querySelectorAll("#dSense button").forEach(b=>{
+      b.classList.toggle("on", (DR.sense||[]).includes(b.dataset.v));
+      b.onclick = ()=>{
+        DR.sense = DR.sense || [];
+        const i = DR.sense.indexOf(b.dataset.v);
+        i>=0 ? DR.sense.splice(i,1) : DR.sense.push(b.dataset.v);
+        putDay(cur,D); dirty=true; renderToday(); renderCal(); renderDayDetail(); mark();
+      };
+    });
+    document.querySelectorAll("#dWake button").forEach(b=>{
+      b.classList.toggle("on", DR.wake===b.dataset.v);
+      b.onclick = ()=>{ DR.wake = DR.wake===b.dataset.v?"":b.dataset.v;
+        putDay(cur,D); dirty=true; renderToday(); mark(); };
+    });
+    const rc = document.getElementById("dRecur");
+    rc.checked = !!DR.recur;
+    rc.onchange = ()=>{ DR.recur = rc.checked; putDay(cur,D); dirty=true; mark(); };
+  }
+  renderDreams();
   renderNS();
   renderTodayLine();
   renderPhase();
@@ -990,7 +1052,7 @@ function renderCal(){
   const first = new Date(y,m,1).getDay(), last = new Date(y,m+1,0).getDate();
   for(let i=0;i<first;i++){ const e=document.createElement("div"); e.className="cell empty"; g.appendChild(e); }
   const mk = `${y}-${pad(m+1)}`, M = months[mk] || {days:{}};
-  let safe=0, done=0, logged=0, sigs=0, syncN=0;
+  let safe=0, done=0, logged=0, sigs=0, syncN=0, dreamN=0;
   for(let d=1; d<=last; d++){
     const k = `${mk}-${pad(d)}`, rec = M.days[pad(d)];
     const cell = document.createElement("div");
@@ -999,8 +1061,9 @@ function renderCal(){
     const ns = rec && rec.notself ? rec.notself.length : 0;
     const sy = syncs.filter(x=>x.date===k).length;
     const ph = phaseOf(k, cycle);
+    const dr = rec && rec.dream && (rec.dream.t||"").trim();
     if(rec && rec.ns){ logged++; if(rec.ns==="안전") safe++; }
-    done += nd; sigs += ns; syncN += sy;
+    done += nd; sigs += ns; syncN += sy; if(dr) dreamN++;
     if(ph){
       cell.style.background = PHASE[ph.name].bg;
       cell.style.borderLeft = `3px solid ${PHASE[ph.name].c}`;
@@ -1010,6 +1073,7 @@ function renderCal(){
     cell.innerHTML =
       (ph && ph.name==="생리기" ? `<span class="mk blood">🩸</span>` : "") +
       (sy ? `<span class="mk sync" title="동시성 ${sy}">✨</span>` : "") +
+      (dr ? `<span class="mk dream" title="꿈 기록">🌙</span>` : "") +
       (ns ? `<span class="mk sig" title="낫셀프 신호 ${ns}">⚡</span>` : "") +
       `<div class="d">${d}</div><div class="dot ${rec&&rec.ns?rec.ns:""}"></div>
       <div class="bar">${"<i></i>".repeat(nd)}</div>`;
@@ -1019,10 +1083,42 @@ function renderCal(){
   }
   document.getElementById("calSummary").innerHTML =
     `기록한 날 <b>${logged}일</b> · 신경계 안전 <b>${safe}일</b> · 완료한 3가지 <b>${done}개</b>` +
-    `<br>✨ 동시성 <b>${syncN}</b> · ⚡ 낫셀프 신호 <b>${sigs}</b>` +
+    `<br>✨ 동시성 <b>${syncN}</b> · ⚡ 낫셀프 <b>${sigs}</b> · 🌙 꿈 <b>${dreamN}</b>` +
     (logged ? `<br><span style="color:var(--ink3)">안전 비율 ${Math.round(safe/logged*100)}% · 하루 평균 완료 ${(done/logged).toFixed(1)}개</span>` : "");
 }
 
+function renderDreams(){
+  const el = document.getElementById("dreamList"); if(!el) return;
+  const list=[];
+  Object.entries(months).forEach(([mk,M])=>{
+    Object.entries(M.days||{}).forEach(([d,rec])=>{
+      const dr = rec.dream;
+      if(dr && (dr.t||"").trim()) list.push({k:`${mk}-${d}`, ...dr});
+    });
+  });
+  list.sort((a,b)=> a.k<b.k?1:-1);
+  setCount("cDream", list.length);
+  el.innerHTML = list.length ? "" : `<div class="empty">아직 기록 없음</div>`;
+  let lastM="";
+  list.forEach(x=>{
+    const m = x.k.slice(0,7);
+    if(m!==lastM){
+      lastM=m;
+      const n=list.filter(y=>y.k.slice(0,7)===m).length;
+      const h=document.createElement("div"); h.className="mdiv";
+      h.innerHTML=`<span>${m.replace("-","년 ")}월</span><b>${n}</b>`;
+      el.appendChild(h);
+    }
+    const tags = [...(x.sense||[]).map(s=>`<span class="dtag">${s}</span>`),
+      x.wake?`<span class="dtag w">${x.wake}</span>`:"",
+      x.recur?`<span class="dtag w">반복</span>`:""].join("");
+    const div=document.createElement("div"); div.className="item";
+    div.innerHTML=`<div class="meta"><span>${x.k}</span></div>
+      <div class="body" style="white-space:pre-wrap">${esc(x.t)}</div>
+      ${tags?`<div class="dtags">${tags}</div>`:""}`;
+    el.appendChild(div);
+  });
+}
 function renderNS(){
   const list = [];
   Object.entries(months).forEach(([mk,M])=>{
@@ -1244,6 +1340,8 @@ const OPEN_DEFAULT = ["오늘 3가지","체크리스트","밤 · 닫는 시간",
 
 function buildFolds(){
   document.querySelectorAll("section.tab").forEach(sec=>{
+    if(sec.dataset.folded === "1") return;
+    sec.dataset.folded = "1";
     const kids = [...sec.children];
     let cur = null;
     kids.forEach(node=>{
@@ -1279,6 +1377,7 @@ function buildFolds(){
   // 탭마다 전체 접기 버튼
   document.querySelectorAll("section.tab").forEach(sec=>{
     if(!sec.querySelector("h2.sec.fold")) return;
+    if(sec.querySelector(":scope > .foldall")) return;
     const bar = document.createElement("div"); bar.className="foldall";
     const btn = document.createElement("button"); btn.textContent="전체 접기";
     btn.onclick = ()=>{
@@ -1322,7 +1421,7 @@ function renderDayDetail(){
   const rt = rituals.filter(x=>x.date===selDay);
   const kp = kept.filter(x=>x.date===selDay);
   const nsColor = {안전:"var(--sage)",경계:"var(--mustard)",생존:"var(--burg)"}[D.ns] || "var(--ink3)";
-  const empty = !D.ns && !D.energy && !done.length && !D.notself.length && !sy.length && !rt.length && !D.learned;
+  const empty = !D.ns && !D.energy && !done.length && !D.notself.length && !sy.length && !rt.length && !D.learned && !(D.dream&&(D.dream.t||"").trim());
 
   const row = (label, html) => html ? `<div class="dd"><span>${label}</span><div>${html}</div></div>` : "";
 
@@ -1341,6 +1440,8 @@ function renderDayDetail(){
     ${row("15분 첫 동작", D.next15?esc(D.next15):"")}
     ${row("체크리스트", ck?`${ck} / 10 완료`:"")}
     ${row("낫셀프 ⚡", D.notself.length? D.notself.map(x=>`<div class="ddt"><b style="color:var(--burg)">${x.type}</b> ${x.time||""} ${esc(x.note||"")}</div>`).join(""):"")}
+    ${row("꿈 🌙", (D.dream&&(D.dream.t||"").trim())? `<div class="ddt" style="white-space:pre-wrap">${esc(D.dream.t)}</div>`+
+        (((D.dream.sense||[]).length||D.dream.wake||D.dream.recur)?`<div class="dtags">${[...(D.dream.sense||[]).map(x=>`<span class="dtag">${x}</span>`),D.dream.wake?`<span class="dtag w">${D.dream.wake}</span>`:"",D.dream.recur?`<span class="dtag w">반복</span>`:""].join("")}</div>`:""):"")}
     ${row("동시성 ✨", sy.length? sy.map(x=>`<div class="ddt">${esc(x.t)}</div>`).join(""):"")}
     ${row("주간 의식", rt.length? rt.map(x=>`<div class="ddt"><b>${x.type}</b> ${esc(x.t)}</div>`).join(""):"")}
     ${row("담아둔 문장", kp.length? kp.map(x=>`<div class="ddt" style="font-family:var(--serif)">${esc(x.t)}</div>`).join(""):"")}
@@ -1393,9 +1494,7 @@ document.getElementById("bKeep").onclick = e=>{
   const it = bList()[bIdx]; if(!it) return;
   const i = kept.findIndex(k=>k.t===it.t);
   if(i>=0) kept.splice(i,1); else kept.unshift({t:it.t, src:it.src, date:cur});
-  dirty=true; dirtyVault=true; renderBium(); renderKeep(); renderStStatus();
-  selDay = keyOf(new Date()); renderDayDetail(); renderCal();
-  buildFolds(); save();
+  dirty=true; dirtyVault=true; renderBium(); renderKeep(); save();
 };
 document.getElementById("autoBtn").onclick = ()=>{
   const b=document.getElementById("autoBtn");
@@ -1624,10 +1723,11 @@ document.getElementById("rollBtn").onclick = ()=>{
 /* ══════════════ 백업 ══════════════ */
 function renderStStatus(){
   const el = document.getElementById("stStatus"); if(!el) return;
-  let days=0, notself=0;
+  let days=0, notself=0, dreams=0;
   Object.values(months).forEach(M=>Object.values(M.days||{}).forEach(d=>{
     if(d.ns||d.energy||(d.todos||[]).some(t=>t.t.trim())) days++;
     notself += (d.notself||[]).length;
+    if(d.dream && (d.dream.t||"").trim()) dreams++;
   }));
   const ok = hasStore;
   el.innerHTML = `<div class="card ${ok?"proto":"warnbox"}">
@@ -1636,7 +1736,7 @@ function renderStStatus(){
     ${STORE==="local"?`<div style="margin-top:6px;font-size:13px;color:var(--ink2)">기기·브라우저마다 따로 저장돼. 폰과 노트북은 별개고, 브라우저 데이터를 지우면 함께 지워져. <b>그래서 주 1회 내보내기가 진짜 백업이야.</b></div>`:""}
     <div style="height:8px"></div>
     기록한 날 <b>${days}일</b> · 낫셀프 <b>${notself}</b> · 아이디어 <b>${ideas.length}</b> ·
-    동시성 <b>${syncs.length}</b> · 담아둔 문장 <b>${kept.length}</b> · 주기 <b>${(cycle.starts||[]).length}</b>
+    동시성 <b>${syncs.length}</b> · 꿈 <b>${dreams}</b> · 담아둔 문장 <b>${kept.length}</b> · 주기 <b>${(cycle.starts||[]).length}</b>
     <div style="height:8px"></div>
     <span style="color:var(--ink2);font-size:13px">기록은 <b>너에게만</b> 보여. 다른 사람은 접근 못 해.</span>
   </div>`;
@@ -1694,7 +1794,7 @@ document.getElementById("impBtn").onclick = ()=>{
   selDay = keyOf(new Date()); renderDayDetail(); renderCal();
   buildFolds();
   ready = true;
-  setState(hasStore ? "v1.2 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
+  setState(hasStore ? "v1.4 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
 })();
 </script>
 </body>
