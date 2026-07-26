@@ -6,7 +6,7 @@
 <title>SAFE MODE OS · 운영 워크북</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.4.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v2.1.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root{
@@ -209,6 +209,23 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 .foldall{display:flex;justify-content:flex-end;margin:-4px 0 10px}
 .foldall button{font-size:12.5px;font-weight:600;color:var(--ink3);border:1px solid var(--rule);
   background:#fff;padding:5px 12px;border-radius:20px}
+.hosttag{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink3);margin-top:2px;word-break:break-all}
+.bal{display:grid;gap:11px}
+.balrow{display:grid;grid-template-columns:96px 1fr 34px;gap:10px;align-items:center;font-size:13.5px}
+.balrow .nm{font-weight:700}
+.balbar{height:9px;background:var(--rule);border-radius:5px;overflow:hidden}
+.balbar i{display:block;height:100%;border-radius:5px}
+.balrow .v{font-family:var(--mono);font-size:12px;text-align:right;color:var(--ink2)}
+.chiprow{display:flex;gap:6px;flex-wrap:wrap}
+.chiprow button{border:1.2px solid var(--rule);background:#fff;padding:7px 13px;border-radius:20px;
+  font-size:13px;font-weight:600;color:var(--ink2)}
+.chiprow button:active{background:var(--sage-bg);border-color:var(--sage);color:var(--sage)}
+.didrow{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px dotted var(--rule);font-size:14.5px}
+.didrow:last-child{border-bottom:none}
+.didrow .tk{color:var(--sage);font-weight:700;flex:none}
+.didrow .tm{font-family:var(--mono);font-size:10.5px;color:var(--ink3);flex:none}
+.didrow .x{margin-left:auto;color:var(--ink3);font-size:17px;line-height:1;flex:none}
+.didrow .tx{flex:1;min-width:0}
 .seg.sm button{padding:6px 12px;font-size:12.5px;border-radius:20px}
 .drec{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;cursor:pointer}
 .drec input{width:17px;height:17px;accent-color:var(--cobalt)}
@@ -281,7 +298,8 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
 <header class="top">
   <div>
-    <div class="brand">SAFE MODE OS <span style="color:var(--cobalt)">v1.4</span></div>
+    <div class="brand">SAFE MODE OS <span style="color:var(--cobalt)">v2.1</span></div>
+    <div id="hostTag" class="hosttag"></div>
     <h1 id="hdate">—</h1>
   </div>
   <div class="streak"><b id="streak">0</b>연속 기록일</div>
@@ -289,6 +307,7 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
 <nav class="tabs">
   <button class="on" data-tab="today">오늘</button>
+  <button data-tab="ns">신경계</button>
   <button data-tab="cal">캘린더</button>
   <button data-tab="log">기록</button>
   <button data-tab="review">리뷰</button>
@@ -355,6 +374,22 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
     <div class="limit" id="limitMsg">3 / 3 — 이 이상은 아이디어 보관함으로</div>
   </div>
 
+  <h2 class="sec">오늘 실행한 것<span class="cnt" id="cDid"></span></h2>
+  <div class="card">
+    <span class="lab">한 번 눌러서 바로 추가</span>
+    <div class="chiprow" id="didChips"></div>
+    <div class="addrow" style="margin-top:12px">
+      <input id="didIn" placeholder="그 밖에 한 것">
+      <button id="didAdd">추가</button>
+    </div>
+    <div id="didList" style="margin-top:6px"></div>
+    <div class="box proto" style="margin:12px 0 0">
+      <span class="lab">이건 성과 목록이 아니야</span>
+      <b>나를 돌봤다는 증거야.</b> 개수 목표 없어. 적게 적힌 날이 못한 날이 아니야.<br>
+      저녁에 "오늘 아무것도 못 했다"는 생각이 올라오면 여기를 봐.
+    </div>
+  </div>
+
   <div class="next">
     <span>▶ 지금 바로</span>
     <input id="next15" placeholder="15분짜리 첫 동작 하나">
@@ -380,6 +415,21 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
     <ul class="chk" id="ckNight"></ul>
   </div>
 
+  <h2 class="sec">오늘의 글리머<span class="cnt" id="cGlim"></span></h2>
+  <div class="card">
+    <span class="lab">감사했던 것 · 기분 좋았던 것 · 마음이 놓였던 순간</span>
+    <div class="addrow">
+      <input id="glimIn" placeholder="아주 작은 것부터. 햇빛, 냄새, 한마디…">
+      <button id="glimAdd">기록</button>
+    </div>
+    <div id="glimList" style="margin-top:6px"></div>
+    <div class="box proto" style="margin:12px 0 0">
+      <span class="lab">글리머란</span>
+      <b>트리거의 반대말</b>이야. 신경계가 "지금 안전하다"고 인식하는 미세한 순간.<br>
+      크지 않아도 돼. 오히려 <b>작을수록 진짜야.</b> 이걸 매일 모으는 게 신경계를 안전모드로 재훈련하는 방법이고.
+    </div>
+  </div>
+
   <h2 class="sec">밤 · 닫는 시간</h2>
   <div class="card">
     <span class="lab">🔍 오늘 배운 것 1줄</span>
@@ -392,6 +442,70 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
     <span class="lab">EVENING RULE</span>
     <p class="big">닫는 시간엔 <b>새 과제·새 아이디어를 던지지 않는다.</b></p>
   </div>
+</section>
+
+<!-- ══════ 신경계 루틴 ══════ -->
+<section class="tab" id="ns">
+  <div id="nsGuide"></div>
+
+  <h2 class="sec">01 · 운동<span class="cnt" id="cN1"></span></h2>
+  <div class="card">
+    <div class="chiprow" id="ch1"></div>
+    <div class="addrow" style="margin-top:12px">
+      <input id="in1" placeholder="그 밖의 운동"><button data-add="운동">추가</button>
+    </div>
+    <div id="list1" style="margin-top:6px"></div>
+    <div class="box note" style="margin:12px 0 0">
+      <span class="lab">언제</span>
+      <b>오후 2~4시</b>가 뿌리 압박 최고조야. 그때 태우면 밤에 짜증으로 안 변해.
+    </div>
+  </div>
+
+  <h2 class="sec">02 · 호흡 훈련<span class="cnt" id="cN2"></span></h2>
+  <div class="card">
+    <div class="chiprow" id="ch2"></div>
+    <div class="addrow" style="margin-top:12px">
+      <input id="in2" placeholder="그 밖의 호흡"><button data-add="호흡">추가</button>
+    </div>
+    <div id="list2" style="margin-top:6px"></div>
+    <div class="box note" style="margin:12px 0 0">
+      <span class="lab">왜</span>
+      호흡은 정의된 <b>뿌리·천골 엔진에 산소를 직접 넣는 것</b>. 목·어깨의 생존 긴장이 배꼽 아래 존재의 확신으로 내려와.
+    </div>
+  </div>
+
+  <h2 class="sec">03 · 기분 좋은 행동<span class="cnt" id="cN3"></span></h2>
+  <div class="card">
+    <div class="chiprow" id="ch3"></div>
+    <div class="addrow" style="margin-top:12px">
+      <input id="in3" placeholder="오늘 기분 좋았던 행동"><button data-add="기분">추가</button>
+    </div>
+    <div id="list3" style="margin-top:6px"></div>
+    <div class="box proto" style="margin:12px 0 0">
+      <span class="lab">이 칸이 제일 중요해</span>
+      1·2번은 <b>하는 것</b>이고 3번은 <b>있는 것</b>이야.<br>
+      운동과 호흡만 채우면 그것도 결국 애씀이 돼. 증명하지 않고 그냥 존재한 순간을 여기 남겨.
+    </div>
+  </div>
+
+  <h2 class="sec">04 · 내 몸 돌봄<span class="cnt" id="cN4"></span></h2>
+  <div class="card">
+    <span class="lab">내 생명체의 신전</span>
+    <div class="chiprow" id="ch4"></div>
+    <div class="addrow" style="margin-top:12px">
+      <input id="in4" placeholder="그 밖의 돌봄"><button data-add="몸 돌봄">추가</button>
+    </div>
+    <div id="list4" style="margin-top:6px"></div>
+    <div class="box note" style="margin:12px 0 0">
+      <span class="lab">허영이 아니야</span>
+      미정의 하트 센터는 가치를 <b>물리적으로 확인하고 싶어 해.</b> 그건 자연스러운 거야.<br>
+      <b>"나는 이 아름다움을 누릴 자격이 충분해"</b>로 하면 채워지고,
+      <b>"이걸로 내 가치를 증명해야 해"</b>로 하면 밑빠진 독이 돼. 같은 행동, 다른 주파수.
+    </div>
+  </div>
+
+  <h2 class="sec">이번 주 균형</h2>
+  <div id="nsBal"></div>
 </section>
 
 <!-- ══════ 캘린더 ══════ -->
@@ -520,6 +634,10 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
   <h2 class="sec">낫셀프 로그<span class="cnt" id="cNs"></span></h2>
   <div id="nsList"></div>
+
+  <h2 class="sec">글리머 아카이브<span class="cnt" id="cGlimA"></span></h2>
+  <p class="muted">쓰는 건 <b>오늘 탭</b>에서. 여기엔 쌓인 게 보여.</p>
+  <div id="glimArchive"></div>
 
   <h2 class="sec">꿈 일기<span class="cnt" id="cDream"></span></h2>
   <p class="muted">캘린더에 🌙 로 표시돼. 쓰는 건 <b>오늘 탭 맨 위</b>에서.</p>
@@ -712,8 +830,8 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 /* ══════════════ 상태 ══════════════ */
 const CK = {
   morning:["외부 정보 차단한 채 호흡 30분","선언 — 나는 나를 증명할 필요가 없다","오늘 3가지 적기"],
-  day:["오후 2~4시 뿌리압박 → 운동으로 연소 (하지수련·인터벌)","사람 만난 뒤 30분 혼자","새 아이디어는 실행 말고 보관함으로","70%에서 내보냈나"],
-  night:["\"이 감정은 내 것이 아니다\" 선언","4-7-8 호흡 4회","몸에게 — 오늘도 살아남느라 애썼다"]
+  day:["오후 2~4시 뿌리압박 → 운동으로 연소 (하지수련·인터벌)","새 아이디어는 실행 말고 보관함으로","완벽하려 하지마 → 70%에서 그냥 내보내"],
+  night:["오늘도 애썼어 — 몸에게 한마디","오늘 감사했던 거 기록하기","기분 좋았던 거 기록하기"]
 };
 const TRAPS = [
   ["아이디어 과잉 → 동시 착수 → 전부 미완","3개 이상 동시에 열려 있음","9번 집중. 하나만. 나머지는 보관함."],
@@ -832,7 +950,7 @@ const pad = n => String(n).padStart(2,"0");
 const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const blank = () => ({energy:"",ns:"",todos:[{t:"",d:false},{t:"",d:false},{t:"",d:false}],
   next15:"",ck:{morning:[],day:[],night:[]},learned:"",tomorrow:"",notself:[],
-  dream:{t:"",sense:[],wake:"",recur:false}});
+  dream:{t:"",sense:[],wake:"",recur:false},did:[],ns3:[],glim:[]});
 
 let today = new Date();
 let cur = keyOf(today);            // 편집 중인 날짜
@@ -1023,8 +1141,13 @@ function renderToday(){
     rc.checked = !!DR.recur;
     rc.onchange = ()=>{ DR.recur = rc.checked; putDay(cur,D); dirty=true; mark(); };
   }
+  renderDid();
+  renderGlim();
+  renderNs3();
   renderDreams();
   renderNS();
+  const ht=document.getElementById("hostTag");
+  if(ht) ht.textContent = location.host || "로컬 파일";
   renderTodayLine();
   renderPhase();
   renderStreak();
@@ -1052,7 +1175,7 @@ function renderCal(){
   const first = new Date(y,m,1).getDay(), last = new Date(y,m+1,0).getDate();
   for(let i=0;i<first;i++){ const e=document.createElement("div"); e.className="cell empty"; g.appendChild(e); }
   const mk = `${y}-${pad(m+1)}`, M = months[mk] || {days:{}};
-  let safe=0, done=0, logged=0, sigs=0, syncN=0, dreamN=0;
+  let safe=0, done=0, logged=0, sigs=0, syncN=0, dreamN=0, didN=0, ns3N=0, glimN=0;
   for(let d=1; d<=last; d++){
     const k = `${mk}-${pad(d)}`, rec = M.days[pad(d)];
     const cell = document.createElement("div");
@@ -1063,7 +1186,7 @@ function renderCal(){
     const ph = phaseOf(k, cycle);
     const dr = rec && rec.dream && (rec.dream.t||"").trim();
     if(rec && rec.ns){ logged++; if(rec.ns==="안전") safe++; }
-    done += nd; sigs += ns; syncN += sy; if(dr) dreamN++;
+    done += nd; sigs += ns; syncN += sy; if(dr) dreamN++; didN += (rec && rec.did ? rec.did.length : 0); ns3N += (rec && rec.ns3 ? rec.ns3.length : 0); glimN += (rec && rec.glim ? rec.glim.length : 0);
     if(ph){
       cell.style.background = PHASE[ph.name].bg;
       cell.style.borderLeft = `3px solid ${PHASE[ph.name].c}`;
@@ -1083,10 +1206,174 @@ function renderCal(){
   }
   document.getElementById("calSummary").innerHTML =
     `기록한 날 <b>${logged}일</b> · 신경계 안전 <b>${safe}일</b> · 완료한 3가지 <b>${done}개</b>` +
-    `<br>✨ 동시성 <b>${syncN}</b> · ⚡ 낫셀프 <b>${sigs}</b> · 🌙 꿈 <b>${dreamN}</b>` +
+    `<br>🌤 글리머 <b>${glimN}</b> · 🧘 신경계 루틴 <b>${ns3N}</b> · ✔ 실행한 것 <b>${didN}</b> · ✨ 동시성 <b>${syncN}</b> · ⚡ 낫셀프 <b>${sigs}</b> · 🌙 꿈 <b>${dreamN}</b>` +
     (logged ? `<br><span style="color:var(--ink3)">안전 비율 ${Math.round(safe/logged*100)}% · 하루 평균 완료 ${(done/logged).toFixed(1)}개</span>` : "");
 }
 
+const DID_SEED = ["레오 산책","햇빛 쬠","자연 느낌","침대 정리","소금물","버터","약 챙겨 먹음","미네랄+레몬물","호흡","운동","폼롤러","물 마심"];
+function didChipList(){
+  const freq = {};
+  Object.values(months).forEach(M=>Object.values(M.days||{}).forEach(d=>{
+    (d.did||[]).forEach(x=>{ const t=(x.t||"").trim(); if(t) freq[t]=(freq[t]||0)+1; });
+  }));
+  const used = Object.keys(freq).sort((a,b)=>freq[b]-freq[a]);
+  const out = [...used];
+  DID_SEED.forEach(t=>{ if(!out.includes(t)) out.push(t); });
+  return out.slice(0,12);
+}
+function addDid(t){
+  t = (t||"").trim(); if(!t) return;
+  const D = dayData(cur);
+  D.did = D.did || [];
+  D.did.unshift({t, time:new Date().toTimeString().slice(0,5)});
+  putDay(cur,D); dirty=true;
+  renderDid(); renderCal(); renderDayDetail(); save();
+}
+function renderDid(){
+  const D = dayData(cur);
+  const list = D.did || [];
+  setCount("cDid", list.length);
+  const cw = document.getElementById("didChips");
+  if(cw){
+    cw.innerHTML = "";
+    didChipList().forEach(t=>{
+      const b=document.createElement("button"); b.textContent="+ "+t;
+      b.onclick=()=>addDid(t);
+      cw.appendChild(b);
+    });
+  }
+  const el = document.getElementById("didList"); if(!el) return;
+  el.innerHTML = list.length ? "" : `<div class="empty" style="padding:12px 0">아직 없어 — 이미 한 게 있을 텐데</div>`;
+  list.forEach((x,i)=>{
+    const d=document.createElement("div"); d.className="didrow";
+    d.innerHTML=`<span class="tk">✔</span><span class="tx">${esc(x.t)}</span>
+      <span class="tm">${x.time||""}</span><button class="x" data-i="${i}">×</button>`;
+    el.appendChild(d);
+  });
+  el.querySelectorAll(".x").forEach(b=> b.onclick=()=>{
+    const DD=dayData(cur); DD.did.splice(+b.dataset.i,1);
+    putDay(cur,DD); dirty=true; renderDid(); renderCal(); renderDayDetail(); mark();
+  });
+}
+const NS3 = {
+  "운동":{n:1,c:"#8E2F3C",seed:["상체","하체","복근","중둔근","요가","필라테스","인터벌","걷기"]},
+  "호흡":{n:2,c:"#2C4A7C",seed:["횡격막 호흡","하지수련","IAP 복압","신전자세","4-7-8","단전호흡"]},
+  "기분":{n:3,c:"#2F6A57",seed:["친절하게 인사","풍요의 감정 느끼기","그냥 나로 존재하기","놓아버리기","감사","레오와 접지"]},
+  "몸 돌봄":{n:4,c:"#A9800A",seed:["괄사","아로마 오일","피부 케어","얼굴 요가","발 마사지","두피 마사지"]}
+};
+function ns3Chips(cat){
+  const freq={};
+  Object.values(months).forEach(M=>Object.values(M.days||{}).forEach(d=>{
+    (d.ns3||[]).forEach(x=>{ if(x.c===cat){ const t=(x.t||"").trim(); if(t) freq[t]=(freq[t]||0)+1; } });
+  }));
+  const out=Object.keys(freq).sort((a,b)=>freq[b]-freq[a]);
+  NS3[cat].seed.forEach(t=>{ if(!out.includes(t)) out.push(t); });
+  return out.slice(0,10);
+}
+function addNs3(cat,t){
+  t=(t||"").trim(); if(!t) return;
+  const D=dayData(cur); D.ns3=D.ns3||[];
+  D.ns3.unshift({c:cat,t,time:new Date().toTimeString().slice(0,5)});
+  putDay(cur,D); dirty=true; renderNs3(); renderDayDetail(); save();
+}
+function renderNs3(){
+  const g=document.getElementById("nsGuide");
+  if(g){
+    const ph=phaseOf(cur,cycle);
+    g.innerHTML = ph ? `<div class="phb" style="background:${PHASE[ph.name].bg};border-color:${PHASE[ph.name].c}">
+      <div class="r1"><div class="nm" style="color:${PHASE[ph.name].c}">${ph.name} ${ph.day}일차${ph.pms?'<span class="pms">PMS</span>':""}</div></div>
+      <div class="ex">🏃 ${PHASE[ph.name].ex}</div></div>`
+      : `<div class="card"><span class="lab">주기</span>기록 탭에서 생리 시작일을 넣으면 오늘 맞는 운동 강도가 떠.</div>`;
+  }
+  const D=dayData(cur); const all=D.ns3||[];
+  Object.entries(NS3).forEach(([cat,cfg])=>{
+    setCount("cN"+cfg.n, all.filter(x=>x.c===cat).length);
+    const cw=document.getElementById("ch"+cfg.n);
+    if(cw){ cw.innerHTML="";
+      ns3Chips(cat).forEach(t=>{ const b=document.createElement("button");
+        b.textContent="+ "+t; b.onclick=()=>addNs3(cat,t); cw.appendChild(b); });
+    }
+    const el=document.getElementById("list"+cfg.n); if(!el) return;
+    const mine=all.map((x,i)=>({x,i})).filter(o=>o.x.c===cat);
+    el.innerHTML = mine.length ? "" : `<div class="empty" style="padding:10px 0">아직 없음</div>`;
+    mine.forEach(({x,i})=>{
+      const d=document.createElement("div"); d.className="didrow";
+      d.innerHTML=`<span class="tk" style="color:${cfg.c}">✔</span><span class="tx">${esc(x.t)}</span>
+        <span class="tm">${x.time||""}</span><button class="x" data-i="${i}">×</button>`;
+      el.appendChild(d);
+    });
+    el.querySelectorAll(".x").forEach(b=> b.onclick=()=>{
+      const DD=dayData(cur); DD.ns3.splice(+b.dataset.i,1);
+      putDay(cur,DD); dirty=true; renderNs3(); renderDayDetail(); mark();
+    });
+  });
+  renderBal();
+}
+function renderBal(){
+  const el=document.getElementById("nsBal"); if(!el) return;
+  const days=[]; const d=new Date(cur.replace(/-/g,"/"));
+  for(let i=0;i<7;i++){ days.push(keyOf(d)); d.setDate(d.getDate()-1); }
+  const cnt=Object.fromEntries(Object.keys(NS3).map(k=>[k,0]));
+  days.forEach(k=>{ (dayData(k).ns3||[]).forEach(x=>{ if(cnt[x.c]!==undefined) cnt[x.c]++; }); });
+  const max=Math.max(1,...Object.values(cnt));
+  const rows=Object.entries(NS3).map(([cat,cfg])=>`<div class="balrow">
+      <span class="nm" style="color:${cfg.c}">${cfg.n}. ${cat}</span>
+      <span class="balbar"><i style="width:${cnt[cat]/max*100}%;background:${cfg.c}"></i></span>
+      <span class="v">${cnt[cat]}</span></div>`).join("");
+  const low=Object.entries(cnt).sort((a,b)=>a[1]-b[1])[0];
+  el.innerHTML=`<div class="card"><span class="lab">최근 7일</span><div class="bal">${rows}</div>
+    <div style="margin-top:13px;padding-top:11px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink2)">
+    ${Object.values(cnt).reduce((a,b)=>a+b,0)===0 ? "이번 주는 아직 비어 있어."
+      : `가장 적은 건 <b style="color:${NS3[low[0]].c}">${low[0]}</b>이야. ${low[0]==="기분"?"1·2·4번은 하는 것이고 3번은 있는 것이야. 하는 것만 채우면 그것도 애씀이 돼.":"채워야 한다는 뜻은 아니야. 그냥 지금 어디에 있는지 보라는 것."}`}
+    </div></div>`;
+}
+function addGlim(t){
+  t=(t||"").trim(); if(!t) return;
+  const D=dayData(cur); D.glim=D.glim||[];
+  D.glim.unshift({t, time:new Date().toTimeString().slice(0,5)});
+  putDay(cur,D); dirty=true; renderGlim(); renderDayDetail(); save();
+}
+function renderGlim(){
+  const D=dayData(cur); const list=D.glim||[];
+  setCount("cGlim", list.length);
+  const el=document.getElementById("glimList");
+  if(el){
+    el.innerHTML = list.length ? "" : `<div class="empty" style="padding:12px 0">오늘 마음이 놓였던 순간 하나만</div>`;
+    list.forEach((x,i)=>{
+      const d=document.createElement("div"); d.className="didrow";
+      d.innerHTML=`<span class="tk" style="color:#C9A227">🌤</span><span class="tx">${esc(x.t)}</span>
+        <span class="tm">${x.time||""}</span><button class="x" data-i="${i}">×</button>`;
+      el.appendChild(d);
+    });
+    el.querySelectorAll(".x").forEach(b=> b.onclick=()=>{
+      const DD=dayData(cur); DD.glim.splice(+b.dataset.i,1);
+      putDay(cur,DD); dirty=true; renderGlim(); renderDayDetail(); mark();
+    });
+  }
+  const ar=document.getElementById("glimArchive");
+  if(ar){
+    const all=[];
+    Object.entries(months).forEach(([mk,M])=>Object.entries(M.days||{}).forEach(([d,rec])=>{
+      (rec.glim||[]).forEach(x=> all.push({k:`${mk}-${d}`, ...x}));
+    }));
+    all.sort((a,b)=> a.k<b.k?1:-1);
+    setCount("cGlimA", all.length);
+    ar.innerHTML = all.length ? "" : `<div class="empty">아직 없음</div>`;
+    let lastM="";
+    all.forEach(x=>{
+      const m=x.k.slice(0,7);
+      if(m!==lastM){ lastM=m;
+        const n=all.filter(y=>y.k.slice(0,7)===m).length;
+        const h=document.createElement("div"); h.className="mdiv";
+        h.innerHTML=`<span>${m.replace("-","년 ")}월</span><b>${n}</b>`; ar.appendChild(h);
+      }
+      const d=document.createElement("div"); d.className="item";
+      d.innerHTML=`<div class="meta"><span>${x.k} · ${x.time||""}</span></div>
+        <div class="body">🌤 ${esc(x.t)}</div>`;
+      ar.appendChild(d);
+    });
+  }
+}
 function renderDreams(){
   const el = document.getElementById("dreamList"); if(!el) return;
   const list=[];
@@ -1286,6 +1573,21 @@ document.getElementById("modal").onclick = e => { if(e.target.id==="modal") clos
 document.getElementById("prevM").onclick = async ()=>{ calMonth.setMonth(calMonth.getMonth()-1); await loadMonth(`${calMonth.getFullYear()}-${pad(calMonth.getMonth()+1)}`); renderCal(); };
 document.getElementById("nextM").onclick = async ()=>{ calMonth.setMonth(calMonth.getMonth()+1); await loadMonth(`${calMonth.getFullYear()}-${pad(calMonth.getMonth()+1)}`); renderCal(); };
 
+document.querySelectorAll("[data-add]").forEach(b=>{
+  const cat=b.dataset.add, n=NS3[cat].n;
+  b.onclick=()=>{ const el=document.getElementById("in"+n); addNs3(cat, el.value); el.value=""; };
+  const inp=document.getElementById("in"+n);
+  if(inp) inp.onkeydown=e=>{ if(e.key==="Enter") b.click(); };
+});
+document.getElementById("glimAdd").onclick = ()=>{
+  const el=document.getElementById("glimIn"); addGlim(el.value); el.value="";
+};
+document.getElementById("glimIn").onkeydown = e=>{ if(e.key==="Enter") document.getElementById("glimAdd").click(); };
+document.getElementById("didAdd").onclick = ()=>{
+  const el=document.getElementById("didIn");
+  addDid(el.value); el.value="";
+};
+document.getElementById("didIn").onkeydown = e=>{ if(e.key==="Enter") document.getElementById("didAdd").click(); };
 document.getElementById("ideaAdd").onclick = ()=>{
   const v = document.getElementById("ideaIn").value.trim(); if(!v) return;
   ideas.unshift({t:v, date:cur, s:"", st:""});
@@ -1306,22 +1608,27 @@ document.getElementById("syncIn").onkeydown = e=>{ if(e.key==="Enter") document.
 function mark(){ if(ready) setState("변경됨 · 저장 필요","var(--mustard)"); }
 
 /* ══════════════ 저장 ══════════════ */
-let saving = false;
+let saving = false, pendingSave = false;
 async function save(){
-  if(saving) return;
+  if(saving){ pendingSave = true; return; }
   if(!dirtyMonths.size && !dirtyVault){ setState("변경 없음"); dirty=false; return; }
   saving = true;
   setState("SAVING…");
   let allOk = true;
-  for(const mk of Array.from(dirtyMonths)){
+  // 쓰기 시작 전에 플래그를 비운다. 쓰는 동안 새로 생긴 변경은 스스로 다시 표시되고,
+  // pendingSave 재실행이 그걸 마저 저장한다.
+  const pendMonths = Array.from(dirtyMonths); dirtyMonths.clear();
+  const pendVault = dirtyVault; dirtyVault = false;
+  for(const mk of pendMonths){
     const ok = await sSet("m:"+mk, months[mk] || {days:{}});
-    if(ok) dirtyMonths.delete(mk); else allOk = false;
+    if(!ok){ dirtyMonths.add(mk); allOk = false; }
   }
-  if(dirtyVault){
+  if(pendVault){
     const ok = await sSet("vault", {ideas, syncs, reviews, releases, sanctuary, rituals, cycle, kept, folds});
-    if(ok) dirtyVault = false; else allOk = false;
+    if(!ok){ dirtyVault = true; allOk = false; }
   }
   saving = false;
+  if(pendingSave){ pendingSave = false; setTimeout(save, 0); }
   dirty = !allOk;
   if(allOk){
     setState("저장됨 · "+new Date().toTimeString().slice(0,5), "var(--sage)");
@@ -1336,7 +1643,8 @@ window.addEventListener("beforeunload", e=>{ if(dirty){ e.preventDefault(); e.re
 
 /* ══════════════ 토글 (노션식) ══════════════ */
 let folds = {};
-const OPEN_DEFAULT = ["오늘 3가지","체크리스트","밤 · 닫는 시간","낫셀프 신호"];
+const OPEN_DEFAULT = ["오늘 3가지","오늘 실행한 것","오늘의 글리머","체크리스트","밤 · 닫는 시간","낫셀프 신호",
+  "01 · 운동","02 · 호흡 훈련","03 · 기분 좋은 행동","04 · 내 몸 돌봄","이번 주 균형"];
 
 function buildFolds(){
   document.querySelectorAll("section.tab").forEach(sec=>{
@@ -1421,7 +1729,7 @@ function renderDayDetail(){
   const rt = rituals.filter(x=>x.date===selDay);
   const kp = kept.filter(x=>x.date===selDay);
   const nsColor = {안전:"var(--sage)",경계:"var(--mustard)",생존:"var(--burg)"}[D.ns] || "var(--ink3)";
-  const empty = !D.ns && !D.energy && !done.length && !D.notself.length && !sy.length && !rt.length && !D.learned && !(D.dream&&(D.dream.t||"").trim());
+  const empty = !D.ns && !D.energy && !done.length && !D.notself.length && !sy.length && !rt.length && !D.learned && !(D.did||[]).length && !(D.ns3||[]).length && !(D.glim||[]).length && !(D.dream&&(D.dream.t||"").trim());
 
   const row = (label, html) => html ? `<div class="dd"><span>${label}</span><div>${html}</div></div>` : "";
 
@@ -1438,7 +1746,10 @@ function renderDayDetail(){
     ${row("에너지", D.energy?`<b>${D.energy}</b>`:"")}
     ${row("오늘 3가지", done.length? done.map(t=>`<div class="ddt ${t.d?"on":""}">${t.d?"✔":"○"} ${esc(t.t)}</div>`).join(""):"")}
     ${row("15분 첫 동작", D.next15?esc(D.next15):"")}
-    ${row("체크리스트", ck?`${ck} / 10 완료`:"")}
+    ${row("글리머 🌤", (D.glim||[]).length? (D.glim||[]).map(x=>`<div class="ddt">${esc(x.t)}</div>`).join(""):"")}
+    ${row("신경계 루틴", (D.ns3||[]).length? (D.ns3||[]).map(x=>`<div class="ddt"><b style="color:${NS3[x.c]?NS3[x.c].c:"var(--ink)"}">${x.c}</b> ${esc(x.t)}</div>`).join(""):"")}
+    ${row("실행한 것", (D.did||[]).length? (D.did||[]).map(x=>`<div class="ddt">✔ ${esc(x.t)}<span style="color:var(--ink3);font-size:11px;margin-left:6px">${x.time||""}</span></div>`).join(""):"")}
+    ${row("체크리스트", ck?`${ck} / ${CK.morning.length+CK.day.length+CK.night.length} 완료`:"")}
     ${row("낫셀프 ⚡", D.notself.length? D.notself.map(x=>`<div class="ddt"><b style="color:var(--burg)">${x.type}</b> ${x.time||""} ${esc(x.note||"")}</div>`).join(""):"")}
     ${row("꿈 🌙", (D.dream&&(D.dream.t||"").trim())? `<div class="ddt" style="white-space:pre-wrap">${esc(D.dream.t)}</div>`+
         (((D.dream.sense||[]).length||D.dream.wake||D.dream.recur)?`<div class="dtags">${[...(D.dream.sense||[]).map(x=>`<span class="dtag">${x}</span>`),D.dream.wake?`<span class="dtag w">${D.dream.wake}</span>`:"",D.dream.recur?`<span class="dtag w">반복</span>`:""].join("")}</div>`:""):"")}
@@ -1723,11 +2034,13 @@ document.getElementById("rollBtn").onclick = ()=>{
 /* ══════════════ 백업 ══════════════ */
 function renderStStatus(){
   const el = document.getElementById("stStatus"); if(!el) return;
-  let days=0, notself=0, dreams=0;
+  let keyN = 0;
+  try{ if(STORE==="local"){ for(let i=0;i<localStorage.length;i++){ if((localStorage.key(i)||"").startsWith("smos:")) keyN++; } } }catch(e){}
+  let days=0, notself=0, dreams=0, didT=0, glimT=0;
   Object.values(months).forEach(M=>Object.values(M.days||{}).forEach(d=>{
     if(d.ns||d.energy||(d.todos||[]).some(t=>t.t.trim())) days++;
     notself += (d.notself||[]).length;
-    if(d.dream && (d.dream.t||"").trim()) dreams++;
+    if(d.dream && (d.dream.t||"").trim()) dreams++; didT += (d.did||[]).length; glimT += (d.glim||[]).length;
   }));
   const ok = hasStore;
   el.innerHTML = `<div class="card ${ok?"proto":"warnbox"}">
@@ -1736,7 +2049,14 @@ function renderStStatus(){
     ${STORE==="local"?`<div style="margin-top:6px;font-size:13px;color:var(--ink2)">기기·브라우저마다 따로 저장돼. 폰과 노트북은 별개고, 브라우저 데이터를 지우면 함께 지워져. <b>그래서 주 1회 내보내기가 진짜 백업이야.</b></div>`:""}
     <div style="height:8px"></div>
     기록한 날 <b>${days}일</b> · 낫셀프 <b>${notself}</b> · 아이디어 <b>${ideas.length}</b> ·
-    동시성 <b>${syncs.length}</b> · 꿈 <b>${dreams}</b> · 담아둔 문장 <b>${kept.length}</b> · 주기 <b>${(cycle.starts||[]).length}</b>
+    동시성 <b>${syncs.length}</b> · 꿈 <b>${dreams}</b> · 실행 <b>${didT}</b> · 글리머 <b>${glimT}</b> · 담아둔 문장 <b>${kept.length}</b> · 주기 <b>${(cycle.starts||[]).length}</b>
+    <div style="height:8px"></div>
+    <div style="height:10px"></div>
+    <div style="background:var(--panel);border-radius:3px;padding:9px 11px;font-size:12.5px;line-height:1.7">
+      <b>지금 이 주소에 저장 중</b><br>
+      <span class="mono" style="font-size:11.5px;color:var(--cobalt);word-break:break-all">${location.host || "로컬 파일"}</span><br>
+      <span style="color:var(--ink2)">저장 항목 ${keyN}개 · 주소가 다르면 기록이 안 보여. 항상 이 주소로만 들어와.</span>
+    </div>
     <div style="height:8px"></div>
     <span style="color:var(--ink2);font-size:13px">기록은 <b>너에게만</b> 보여. 다른 사람은 접근 못 해.</span>
   </div>`;
@@ -1794,7 +2114,7 @@ document.getElementById("impBtn").onclick = ()=>{
   selDay = keyOf(new Date()); renderDayDetail(); renderCal();
   buildFolds();
   ready = true;
-  setState(hasStore ? "v1.4 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
+  setState(hasStore ? "v2.1 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
 })();
 </script>
 </body>
