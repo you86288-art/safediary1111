@@ -15,7 +15,7 @@
 <title>SAFE MODE OS · 운영 워크북</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v2.5.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v2.7.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root{
@@ -196,6 +196,33 @@ input.line{width:100%;border:none;border-bottom:1px dotted var(--ink3);backgroun
 .emocard .cat{font-size:11.5px;color:var(--ink3);margin-left:6px}
 .relhint{font-size:13px;color:var(--ink2);line-height:1.65;margin-top:9px;min-height:1px}
 .relhint b{color:var(--cobalt)}
+.cohwrap{display:flex;flex-direction:column;align-items:center;padding:16px 0 4px}
+.cohring{width:170px;height:170px;border-radius:50%;border:1.5px dashed var(--rule);
+  display:flex;align-items:center;justify-content:center;position:relative}
+.cohball{width:150px;height:150px;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%, #6FA994, #2F6A57);
+  transform:scale(.42);transition:transform 5.5s cubic-bezier(.37,0,.63,1);
+  box-shadow:0 4px 22px rgba(47,106,87,.28)}
+.cohball.out{transform:scale(1)}
+.cohtxt{font-family:var(--serif);font-size:19px;font-weight:700;margin-top:16px;color:var(--sage);letter-spacing:.04em}
+.cohmeta{display:flex;gap:18px;margin-top:7px;font-family:var(--mono);font-size:12.5px;color:var(--ink2)}
+.cohday{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.cohday .cd{flex:1;min-width:96px;border:1.2px solid var(--rule);border-radius:3px;padding:10px;text-align:center;background:#fff}
+.cohday .cd.on{background:var(--sage-bg);border-color:var(--sage)}
+.cohday .cd .t{font-size:13px;font-weight:700}
+.cohday .cd .s{font-size:11.5px;color:var(--ink3);margin-top:3px}
+.cohday .cd.on .s{color:var(--sage);font-weight:700}
+.cohweek{grid-column:1/-1;display:flex;gap:4px;margin-top:10px}
+.cohweek i{flex:1;height:6px;border-radius:3px;background:var(--rule)}
+.cohweek i.h{background:var(--sage)}
+.dashrow{display:grid;grid-template-columns:104px 1fr 26px;gap:9px;align-items:center;padding:8px 0;border-bottom:1px dotted var(--rule)}
+.dashrow:last-of-type{border-bottom:none}
+.dashrow.key{background:#F5F2EA;margin:0 -6px;padding:8px 6px;border-radius:3px}
+.dashrow .dn{font-size:13px;font-weight:700}
+.dashrow .db{height:9px;background:var(--rule);border-radius:5px;overflow:hidden}
+.dashrow .db i{display:block;height:100%;border-radius:5px}
+.dashrow .dv{font-family:var(--mono);font-size:14px;text-align:right;font-weight:700}
+.dashrow .dw{grid-column:1/-1;font-size:11.5px;color:var(--ink3);margin-top:-3px}
 .wbar-root{display:grid;grid-template-columns:52px 1fr 30px;gap:10px;align-items:center;font-size:13.5px;margin-bottom:9px}
 .wbar-root .nm{font-weight:700}
 .wbar-root .bar2{height:9px;background:var(--rule);border-radius:5px;overflow:hidden}
@@ -332,7 +359,7 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
 <header class="top">
   <div>
-    <div class="brand">SAFE MODE OS <span style="color:var(--cobalt)">v2.5</span></div>
+    <div class="brand">SAFE MODE OS <span style="color:var(--cobalt)">v2.7</span></div>
     <div id="hostTag" class="hosttag"></div>
     <h1 id="hdate">—</h1>
   </div>
@@ -485,6 +512,32 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 <!-- ══════ 신경계 루틴 ══════ -->
 <section class="tab" id="ns">
   <div id="nsGuide"></div>
+
+  <h2 class="sec">코히런스 호흡<span class="cnt" id="cCoh"></span></h2>
+  <div class="card">
+    <span class="lab">들숨 5.5초 · 날숨 5.5초 = 분당 5.5회 = 0.1Hz</span>
+    <div class="cohwrap">
+      <div class="cohring"><div class="cohball" id="cohBall"></div></div>
+      <div class="cohtxt" id="cohTxt">준비</div>
+      <div class="cohmeta"><span id="cohLeft">5:00</span><span id="cohCyc">0회전</span></div>
+    </div>
+    <div class="seg sm" id="cohLen" style="margin-top:14px">
+      <button data-v="300">5분 · 아침/저녁</button>
+      <button data-v="180">3분</button>
+      <button data-v="90">90초 · 몰입 전</button>
+    </div>
+    <button class="bigbtn sage" id="cohBtn" style="margin-top:12px">시작</button>
+    <div class="cohday" id="cohDay"></div>
+    <div class="box proto" style="margin:14px 0 0">
+      <span class="lab">왜 5.5초인가</span>
+      이 주파수에서 <b>심박변이도 · 호흡 · 혈압 리듬이 위상 일치(공명)</b>해.
+      은유가 아니라 측정되는 현상이야. 미주신경 톤이 올라가고 <b>안전모드로 들어가는 가장 빠른 물리적 스위치</b>야.
+      <div style="height:9px"></div>
+      <b>아침 기상 후 5분</b> — 스마트폰 켜기 전. 이게 진짜 중요해.<br>
+      <b>몰입 블록 진입 직전 90초</b><br>
+      <b>저녁 5분</b> — 닫는 시간에
+    </div>
+  </div>
 
   <h2 class="sec">01 · 운동<span class="cnt" id="cN1"></span></h2>
   <div class="card">
@@ -724,6 +777,10 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
 <!-- ══════ 리뷰 ══════ -->
 <section class="tab" id="review">
+  <h2 class="sec">정렬 대시보드</h2>
+  <p class="muted">성과 지표가 아니라 <b>정렬 지표</b>야 — 내가 통제할 수 있고, 내 설계대로 살고 있는지를 보여주는 숫자. <b>해석 금지. 보기만 한다.</b></p>
+  <div id="dash"></div>
+
   <h2 class="sec">위클리 리뷰</h2>
   <div class="card">
     <span class="lab">01 · PATTERN — 이번 주 반복된 패턴 1개 (칭찬 아님, 관찰)</span>
@@ -940,10 +997,49 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 
 <!-- ══════ 개입 카드 ══════ -->
 <section class="tab" id="card">
-  <h2 class="sec">함정 개입 카드</h2>
-  <div id="traps"></div>
   <div class="core">
-    <span class="lab">과부하 SOS · 3단계</span>
+    <span class="lab">헌법</span>
+    <p class="big mono" style="font-size:14px">신경계 &gt; 건강 &gt; 에너지 &gt; 존재 &gt; 관계 &gt; 실행 &gt; 성과</p>
+    <p style="font-size:13.5px;color:#9FB4D6;margin:10px 0 0">하루의 리듬을 해치는 성장은 성장이 아니라 후퇴다.<br>
+    유일한 지표 = <b>밖으로 나간 완결된 것의 개수</b></p>
+  </div>
+
+  <h2 class="sec">낮 개입 · 몸이 신호를 보낼 때만</h2>
+  <div id="traps"></div>
+
+  <h2 class="sec">상한선 · 두 모드</h2>
+  <div class="card">
+    <span class="lab">상한선 — 넘으면 시스템이 무너져</span>
+    활성 프로젝트 <b>1</b> · 오늘 할 일 <b>3</b> · 블록 <b>3개</b>(각 90분 이하)<br>
+    도구 1역할 1개 · 새 도구는 6개월에 1개
+  </div>
+  <div class="card">
+    <span class="lab">두 모드 — 섞지 않는다</span>
+    <b style="color:var(--sage)">FLOW</b> — 침대 · 산책 · 명상 · 카페 / 체크리스트 없음 / 성과측정 없음<br>
+    <b style="color:var(--cobalt)">CEO</b> — 책상 / 10~12 · 16~18 / 오직 내보내기
+    <div style="height:9px"></div>
+    → Flow에서 CEO 안 한다. CEO에서 영감 안 찾는다.<br>
+    → <b>14~16시는 운동.</b> 책상 아님.
+  </div>
+  <div class="card">
+    <span class="lab">에너지 예산 — 기어별</span>
+    <b>상 · 폭발기 100</b> — 몸25 / 창조30 / CEO30 / 여유15<br>
+    <b>중 · 평지 70</b> — 몸20 / 창조20 / CEO20 / 여유10<br>
+    <b>하 · 정체기 40</b> — 몸15 / 입력10 / CEO <b style="color:var(--burg)">0</b> / 여유15
+    <div style="height:9px"></div>
+    → 오전에 50% 넘게 쓰면 <b>오후 CEO 블록 자동 취소</b>
+  </div>
+  <div class="card">
+    <span class="lab">카테고리 3 — 나머지는 전부 이 셋의 모듈</span>
+    ① SAFE MODE 연구소 &nbsp; ② 내면맵(AI) &nbsp; ③ 작가
+    <div style="height:9px"></div>
+    <b>활성 1</b> — 이번 분기 하나만 민다. 나머지 둘은 유지 모드.<br>
+    <span style="color:var(--ink2);font-size:13px">※ ③ 작가의 글 발행만은 어느 분기에도 멈추지 않는다</span>
+  </div>
+
+  <h2 class="sec">과부하 SOS</h2>
+  <div class="core">
+    <span class="lab">3단계</span>
     <p class="big">① 지금 몸에서 뭐가 느껴져? — 한 단어로<br>② 지금 이 감정, 진짜 내 거야? — 아니면 놓는다<br>③ 오늘 딱 하나만 한다면? — 15분짜리 하나</p>
   </div>
   <p class="muted">이 세 줄이 나오면 그 외의 모든 제안·아이디어·정보는 보류야. 분석하지 마.</p>
@@ -968,20 +1064,33 @@ h2.sec.fold .badge{margin-left:auto;font-size:11.5px;font-weight:600;color:var(-
 <script>
 /* ══════════════ 상태 ══════════════ */
 const CK = {
-  morning:["외부 정보 차단한 채 호흡 30분","선언 — 나는 나를 증명할 필요가 없다","오늘 3가지 적기"],
+  morning:["기상 후 5분 코히런스 호흡 — 폰 켜기 전","선언 — 나는 나를 증명할 필요가 없다","오늘 3가지 적기"],
   day:["오후 2~4시 뿌리압박 → 운동으로 연소 (하지수련·인터벌)","새 아이디어는 실행 말고 보관함으로","완벽하려 하지마 → 70%에서 그냥 내보내"],
   night:["오늘도 애썼어 — 몸에게 한마디","오늘 감사했던 거 기록하기","기분 좋았던 거 기록하기"]
 };
 const TRAPS = [
-  ["아이디어 과잉 → 동시 착수 → 전부 미완","3개 이상 동시에 열려 있음","9번 집중. 하나만. 나머지는 보관함."],
-  ["완벽주의 → 출시 지연 → 자책","\"조금만 더 다듬으면\"","70%에 내보내기. 30%는 시장이 알려줘."],
-  ["타인의 감정·속도 흡수 → 조급함","남의 말 직후 급하게 결정하고 싶음","방을 나와 30분. 그 다음 재질문."],
-  ["성과 없음 = 나의 결함","조회수·숫자에 자존감 출렁","나는 증명할 필요가 없다. 숫자는 베타 데이터."],
-  ["가라앉는 날을 고장으로 해석하고 쥐어짬","죄책감 + 억지 몰입","성과 목표 0으로 재설정."],
-  ["영적 우월감 요새화","\"내 민감함 때문에 주변이 맞춰야 한다\"","힘 + 겸손만이 롤모델이 된다."],
-  ["증명 욕구가 소비로 새어나감","갑작스러운 물건 갈망","하트 센터가 반짝이길 원하는구나 — 관찰만."],
-  ["고립","사람과 며칠째 연결 없음","은둔은 처방, 고립은 부작용. 한 명에게 연락."],
-  ["트레이딩 충동","오후 2~4시 · 손실 직후 · 감정 격앙","매매 금지. 그 시간은 운동 시간."]
+["명치 끝이 답답하다","좌절","천골 응답 없이 머리로 시작했다.",
+ "10분 멈춤 → 혼자 있는 공간 → 4-7-8 호흡 → 대기.<br>지금 하던 일을 <b>이어가지 마.</b> 응답이 올 때까지 기다려."],
+["목 뒷덜미가 뜨겁다 · 턱이 깨물린다","분노","알리기(Inform)를 생략했다.",
+ "한 문장만 선언해 — <b>\u201c나 지금 이거 할 거야.\u201d</b><br>허락을 구하는 게 아니야. 길을 터주는 에너지적 예의야."],
+["이유 없이 감정이 크다","흡수","그 감정의 상당 부분은 네 것이 아니야.",
+ "① \u201c이거 내 거야?\u201d → 아니면 놓는다<br>② 방을 나온다. 30분.<br><b>방을 나오면 절반이 사라진다.</b> 은유가 아니라 물리 법칙이야."],
+["조바심 · 다리 떨림 · 안절부절","뿌리 압박","몸을 써야 빠지는 압력이야. 생각으로는 안 빠져.",
+ "근력 · 계단 · 빠른 걷기 <b>20분</b>.<br>오후 2~4시에 최고조야. 그 시간은 책상이 아니라 <b>운동 시간</b>이야."],
+["숫자를 보고 기분이 흔들렸다","차단기","해석을 끊고 사실만 남긴다.",
+ "① 감정 한 단어 / 강도 1~10<br>② 이거 내 거야? — 남의 반응에 대한 <b>내 해석</b> → 놓는다<br>③ 사실만 한 줄 (해석 금지)<br>④ 이 숫자가 내 다음 행동 중 <b>무엇을 실제로 바꾸나?</b> 아무것도 안 바뀌면 그냥 데이터야<br>⑤ 이번 주 <b>출시 개수</b> — 그것만이 성적표<br>⑥ \u201c숫자는 베타 테스트 데이터다. 나는 증명할 필요가 없다.\u201d<br>⑦ 앱 닫기 → 일어나기 → 8초 날숨 4회<br><b style=\"color:var(--burg)\">절대 금지 — 그 순간 답장 · 결정 · 발행 · 전략 변경</b>"],
+["거절 · 무반응에 무너졌다","거절 민감성","첫 파도는 대체로 90초 안에 지나가.",
+ "① 이름 붙이기 — \u201c아, 거절 민감성이 올라왔다\u201d (이름만으로 상당히 줄어)<br>② <b>최소 90초 대기</b><br>③ 사실만 한 줄<br>④ \u201c저 말은 나의 가치를 훼손할 수 없다.\u201d<br>⑤ 8초 날숨 4회"],
+["새 아이디어가 반짝인다","SPARK","실행하지 마. 지금은 적기만 해.",
+ "<b>S</b> 5분 — 보관함에 한 줄 + \u201c처음 떠오른 자극\u201d<br><b>P</b> 24시간 — 아무것도 안 한다. <b>가짜는 여기서 사라진다</b><br><b>A</b> 1분 — \u201c지금 이걸 시작할까?\u201d 으응이면 보관, 끝, 죄책감 없음<br><b>R</b> 90분 — 스프린트 하나. 목표는 완성이 아니라 <b>밖에 보여줄 최소 조각 1개</b><br><b>K</b> — 가볍고 신남 → 대기열 / 무겁고 의무감 → 폐기<br><b style=\"color:var(--burg)\">단일 테스트: \u201c지금 당장\u201d이 붙으면 대체로 가짜다.</b>"],
+["\u201c조금만 더 다듬으면\u201d","완벽주의","지금 상태로 발행. 예외 없음.",
+ "· 같은 문단 세 번째 고치는 중 → 타이머 종료, 발행<br>· 발행 직전에 새 자료 찾기 시작 → 리서치가 아니라 <b>회피</b>야<br>· 예정일 두 번 밀림 → 범위를 절반으로 잘라내고 발행<br><b>70%로 내보내. 나머지 30%는 시장이 알려줘.</b>"],
+["프로젝트를 3개째 열고 싶다","동시 착수","하나를 먼저 닫아.",
+ "닫는다는 건 <b>완성이거나 명시적 폐기</b>야. 방치는 닫은 게 아니야.<br>상한 — 활성 프로젝트 <b>1</b> · 하루 할 일 <b>3</b> · 블록 <b>3개</b>(각 90분 이하)"],
+["가라앉는다 · 아무것도 못 하겠다","정체기","고장이 아니라 잉태기야.",
+ "오늘 성과 목표는 <b>0으로 재설정</b>. 조정이 아니라 재설정.<br>할 것 — 정리 · 입력 · 휴식 · 뒹굴기 · 산책 · 필사 · 레오와 접지<br>하지 말 것 — 성과 목표 · 억지 몰입 · 죄책감 회로 · 투두 채우기 · SNS 숫자<br><b>최소 유지선 3분</b> — 물 한 잔 + 긴 날숨 5번 / 침대 정리 / 한 줄 기록<br>이 셋을 한 날은 <b>끊긴 날이 아니야.</b>"],
+["사람과 5일째 연결이 없다","⚠ 고립","은둔은 처방이고, 고립은 부작용이야. 둘은 달라.",
+ "충전되면 은둔 / 점점 무거워지면 고립.<br>지금은 이 페이지를 닫고 <b>한 명에게 연락해.</b><br>\u201c그냥 목소리 듣고 싶어서\u201d면 충분해."]
 ];
 
 const DECL = {
@@ -1089,7 +1198,7 @@ const pad = n => String(n).padStart(2,"0");
 const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const blank = () => ({energy:"",ns:"",todos:[{t:"",d:false},{t:"",d:false},{t:"",d:false}],
   next15:"",ck:{morning:[],day:[],night:[]},learned:"",tomorrow:"",notself:[],
-  dream:{t:"",sense:[],wake:"",recur:false},did:[],ns3:[],glim:[],out:[],rel:[]});
+  dream:{t:"",sense:[],wake:"",recur:false},did:[],ns3:[],glim:[],out:[],rel:[],coh:[]});
 
 let today = new Date();
 let cur = keyOf(today);            // 편집 중인 날짜
@@ -1283,6 +1392,7 @@ function renderToday(){
   renderOut();
   renderDid();
   renderGlim();
+  renderCoh();
   renderNs3();
   renderDreams();
   renderNS();
@@ -1428,7 +1538,7 @@ function renderDid(){
 }
 const NS3 = {
   "운동":{n:1,c:"#8E2F3C",seed:["상체","하체","복근","중둔근","요가","필라테스","인터벌","걷기"]},
-  "호흡":{n:2,c:"#2C4A7C",seed:["횡격막 호흡","하지수련","IAP 복압","신전자세","4-7-8","단전호흡"]},
+  "호흡":{n:2,c:"#2C4A7C",seed:["코히런스 호흡","횡격막 호흡","하지수련","IAP 복압","신전자세","4-7-8","단전호흡"]},
   "기분":{n:3,c:"#2F6A57",seed:["친절하게 인사","풍요의 감정 느끼기","그냥 나로 존재하기","놓아버리기","감사","레오와 접지"]},
   "몸 돌봄":{n:4,c:"#A9800A",seed:["괄사","아로마 오일","피부 케어","얼굴 요가","발 마사지","두피 마사지"]}
 };
@@ -1642,28 +1752,25 @@ function renderSyncs(){
 }
 
 function renderTraps(){
-  const el = document.getElementById("traps");
+  const el = document.getElementById("traps"); if(!el) return;
   el.innerHTML = "";
-  TRAPS.forEach(([t,sg,a],i)=>{
+  TRAPS.forEach(([sig,name,why,fix],i)=>{
     const d = document.createElement("div"); d.className="card warnbox";
-    d.innerHTML = `<span class="lab">TRAP ${pad(i+1)}</span><b>${t}</b>
-      <div class="muted" style="margin:6px 0 8px">신호 — ${sg}</div>
-      <div style="color:var(--burg);font-weight:700;margin-bottom:10px">→ ${a}</div>
-      <button class="pill" data-trap="${i}" style="border-color:var(--burg);color:var(--burg);padding:5px 11px">이거 지금 나야</button>`;
+    d.innerHTML = '<span class="lab">'+name+'</span><b style="font-size:15px">'+sig+'</b>'
+      +'<div class="muted" style="margin:6px 0 9px">'+why+'</div>'
+      +'<div style="line-height:1.85">'+fix+'</div>'
+      +'<button class="pill" data-trap="'+i+'" style="border-color:var(--burg);color:var(--burg);padding:5px 11px;margin-top:11px">이거 지금 나야</button>';
     el.appendChild(d);
   });
   el.querySelectorAll("[data-trap]").forEach(b=> b.onclick=()=>{
-    const [t,,a] = TRAPS[+b.dataset.trap];
+    const [sig,name] = TRAPS[+b.dataset.trap];
     const D = dayData(cur);
-    D.notself.push({type:"함정", note:t, time:new Date().toTimeString().slice(0,5)});
+    D.notself.push({type:name, note:sig, time:new Date().toTimeString().slice(0,5)});
     putDay(cur,D); dirty=true; save(); renderToday(); renderCal(); renderDayDetail();
-    showModal(`<h3>${t}</h3><div class="card proto"><span class="lab">즉시 개입</span>
-      <b style="font-family:var(--serif);font-size:17px">${a}</b></div>
-      <p class="muted">기록됐어. 90일 뒤에 어떤 함정이 제일 자주 걸렸는지 보일 거야.</p>`);
+    showModal('<h3>'+name+'</h3><p class="muted">기록됐어. 90일 뒤에 어떤 신호가 제일 자주 왔는지 보일 거야.</p>');
   });
 }
-
-function setCount(id,n){ const e=document.getElementById(id); if(e) e.textContent = n ? `${n}` : ""; }
+function setCount(id,n){ const e=document.getElementById(id); if(e) e.textContent = n ? String(n) : ""; }
 const esc = s => String(s||"").replace(/[<>&]/g, c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]));
 
 /* ══════════════ 인터랙션 ══════════════ */
@@ -1671,6 +1778,7 @@ function switchTab(id){
   document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on", b.dataset.tab===id));
   document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on", s.id===id));
   if(id==="cal") renderCal();
+  if(id==="review") renderDash();
 }
 document.querySelectorAll("nav.tabs button").forEach(b=> b.onclick = ()=> switchTab(b.dataset.tab));
 
@@ -1829,7 +1937,7 @@ window.addEventListener("beforeunload", e=>{ if(dirty){ e.preventDefault(); e.re
 /* ══════════════ 토글 (노션식) ══════════════ */
 let folds = {};
 const OPEN_DEFAULT = ["오늘 3가지","내보낸 것","오늘의 글리머","오늘 실행한 것","체크리스트","밤 · 닫는 시간","낫셀프 신호",
-  "01 · 운동","02 · 호흡 훈련","03 · 기분 좋은 행동","04 · 내 몸 돌봄","이번 주 균형","놓기 · 뿌리","내 주 패턴","감정 알아차림 5단계"];
+  "코히런스 호흡","01 · 운동","02 · 호흡 훈련","03 · 기분 좋은 행동","04 · 내 몸 돌봄","이번 주 균형","정렬 대시보드","놓기 · 뿌리","내 주 패턴","감정 알아차림 5단계","낮 개입 · 몸이 신호를 보낼 때만"];
 
 function buildFolds(){
   document.querySelectorAll("section.tab").forEach(sec=>{
@@ -1914,7 +2022,7 @@ function renderDayDetail(){
   const rt = rituals.filter(x=>x.date===selDay);
   const kp = kept.filter(x=>x.date===selDay);
   const nsColor = {안전:"var(--sage)",경계:"var(--mustard)",생존:"var(--burg)"}[D.ns] || "var(--ink3)";
-  const empty = !D.ns && !D.energy && !done.length && !D.notself.length && !sy.length && !rt.length && !D.learned && !(D.did||[]).length && !(D.ns3||[]).length && !(D.glim||[]).length && !(D.out||[]).length && !(D.rel||[]).length && !(D.dream&&(D.dream.t||"").trim());
+  const empty = !D.ns && !D.energy && !done.length && !D.notself.length && !sy.length && !rt.length && !D.learned && !(D.did||[]).length && !(D.ns3||[]).length && !(D.glim||[]).length && !(D.out||[]).length && !(D.rel||[]).length && !(D.coh||[]).length && !(D.dream&&(D.dream.t||"").trim());
 
   const row = (label, html) => html ? `<div class="dd"><span>${label}</span><div>${html}</div></div>` : "";
 
@@ -1934,6 +2042,7 @@ function renderDayDetail(){
     ${row("내보낸 것 📤", (D.out||[]).length? (D.out||[]).map(x=>'<div class="ddt"><b style="color:'+(x.tag==="비즈니스"?"#2C4A7C":"#A9800A")+'">['+x.tag+']</b> '+esc(x.t)+'</div>').join(""):"")}
     ${row("글리머 🌤", (D.glim||[]).length? (D.glim||[]).map(x=>`<div class="ddt">${esc(x.t)}</div>`).join(""):"")}
     ${row("놓기 뿌리", (D.rel||[]).length? (D.rel||[]).map(x=>'<div class="ddt"><b style="color:var(--mustard)">'+x.w+'</b>'+(x.e?' · '+x.e:'')+' '+x.b+' → '+x.a+'</div>').join(""):"")}
+    ${row("코히런스 🫁", (D.coh||[]).length? (D.coh||[]).map(x=>'<div class="ddt">'+(x.slot==="am"?"☀️ 아침":"🌙 저녁")+' '+(x.len>=300?"5분":x.len>=180?"3분":"90초")+' · '+x.cyc+'회전</div>').join(""):"")}
     ${row("신경계 루틴", (D.ns3||[]).length? (D.ns3||[]).map(x=>`<div class="ddt"><b style="color:${NS3[x.c]?NS3[x.c].c:"var(--ink)"}">${x.c}</b> ${esc(x.t)}</div>`).join(""):"")}
     ${row("실행한 것", (D.did||[]).length? (D.did||[]).map(x=>`<div class="ddt">✔ ${esc(x.t)}<span style="color:var(--ink3);font-size:11px;margin-left:6px">${x.time||""}</span></div>`).join(""):"")}
     ${row("체크리스트", ck?`${ck} / ${CK.morning.length+CK.day.length+CK.night.length} 완료`:"")}
@@ -2077,6 +2186,65 @@ document.getElementById("cycAdd").onclick = ()=>{
   document.getElementById("cycIn").value="";
   dirty=true; dirtyVault=true; renderCyc(); renderPhase(); renderCal(); save();
 };
+
+/* ══════════════ 코히런스 호흡 ══════════════ */
+let cohLen = 300, cohT = null, cohLeft = 0, cohCyc = 0, cohPhase = 0;
+const COH_HALF = 5.5;
+function fmtT(sec){ return Math.floor(sec/60)+":"+String(Math.max(0,Math.round(sec%60))).padStart(2,"0"); }
+function cohStop(done){
+  clearInterval(cohT); cohT=null;
+  document.getElementById("cohBall").classList.remove("out");
+  document.getElementById("cohBtn").textContent="시작";
+  document.getElementById("cohTxt").textContent = done ? "끝. 그대로 잠깐 머물러." : "준비";
+  if(done){
+    const D=dayData(cur); D.coh=D.coh||[];
+    const h=new Date().getHours();
+    D.coh.unshift({len:cohLen, cyc:cohCyc, slot: h<12?"am":"pm", time:new Date().toTimeString().slice(0,5)});
+    putDay(cur,D); dirty=true;
+    addNs3("호흡","코히런스 호흡 "+(cohLen>=300?"5분":cohLen>=180?"3분":"90초"));
+    renderCoh(); renderDayDetail();
+  }
+}
+function cohTick(){
+  cohLeft -= 0.1;
+  document.getElementById("cohLeft").textContent = fmtT(cohLeft);
+  if(cohLeft <= 0){ cohStop(true); return; }
+  const elapsed = cohLen - cohLeft;
+  const ph = Math.floor(elapsed / COH_HALF) % 2;
+  if(ph !== cohPhase){
+    cohPhase = ph;
+    const ball=document.getElementById("cohBall");
+    if(ph===0){ ball.classList.add("out"); document.getElementById("cohTxt").textContent="들이마시기";
+      cohCyc++; document.getElementById("cohCyc").textContent=cohCyc+"회전"; }
+    else { ball.classList.remove("out"); document.getElementById("cohTxt").textContent="내쉬기"; }
+  }
+}
+function cohStart(){
+  cohLeft = cohLen; cohCyc = 0; cohPhase = -1;
+  document.getElementById("cohBtn").textContent="중단";
+  document.getElementById("cohCyc").textContent="0회전";
+  cohT = setInterval(cohTick, 100);
+}
+function renderCoh(){
+  document.querySelectorAll("#cohLen button").forEach(b=>{
+    b.classList.toggle("on", +b.dataset.v===cohLen);
+    b.onclick=()=>{ if(cohT) return; cohLen=+b.dataset.v;
+      document.getElementById("cohLeft").textContent=fmtT(cohLen); renderCoh(); };
+  });
+  const btn=document.getElementById("cohBtn");
+  if(btn) btn.onclick=()=>{ cohT ? cohStop(false) : cohStart(); };
+  const D=dayData(cur), list=D.coh||[];
+  setCount("cCoh", list.length);
+  const am=list.some(x=>x.slot==="am"), pm=list.some(x=>x.slot==="pm");
+  const days=[]; const d=new Date(cur.replace(/-/g,"/"));
+  for(let i=0;i<7;i++){ days.push(keyOf(d)); d.setDate(d.getDate()-1); }
+  const week=days.reverse().map(k=>'<i class="'+((dayData(k).coh||[]).length?"h":"")+'"></i>').join("");
+  const el=document.getElementById("cohDay");
+  if(el) el.innerHTML='<div class="cd'+(am?" on":"")+'"><div class="t">☀️ 아침</div><div class="s">'+(am?"완료":"기상 후 5분")+'</div></div>'
+    +'<div class="cd'+(pm?" on":"")+'"><div class="t">🌙 저녁</div><div class="s">'+(pm?"완료":"닫는 시간 5분")+'</div></div>'
+    +'<div class="cohweek">'+week+'</div>';
+  if(!cohT) document.getElementById("cohLeft").textContent=fmtT(cohLen);
+}
 
 /* ══════════════ 기록 · 의식 ══════════════ */
 function weekStart(d){ const x=new Date(d); const g=(x.getDay()+6)%7; x.setDate(x.getDate()-g); return keyOf(x); }
@@ -2344,6 +2512,48 @@ function renderWarn(){
 }
 
 /* ══════════════ 백업 ══════════════ */
+const DASH = [
+ {k:"out",  n:"📤 출시 개수",        g:2, w:"목표 2~3 · 유일한 성적표"},
+ {k:"frus", n:"⚡ 좌절 신호",        g:2, w:"목표 2 이하 · 낮을수록 응답으로 시작한 것", low:true},
+ {k:"burn", n:"🔥 오후 압력 연소일",  g:4, w:"목표 4일"},
+ {k:"safe", n:"🌊 신경계 안전모드일", g:5, w:"목표 5일 · 헌법 1순위", key:true},
+ {k:"rest", n:"😌 죄책감 없이 쉰 날", g:1, w:"목표 1일 이상"},
+ {k:"glim", n:"🌤 글리머 기록일",     g:7, w:"목표 7일"},
+ {k:"log",  n:"✍️ 기록한 날",         g:7, w:"목표 7일"}
+];
+function renderDash(){
+  const el=document.getElementById("dash"); if(!el) return;
+  const days=[]; const d=new Date(cur.replace(/-/g,"/"));
+  for(let i=0;i<7;i++){ days.push(keyOf(d)); d.setDate(d.getDate()-1); }
+  const v={out:0,frus:0,burn:0,safe:0,rest:0,glim:0,log:0};
+  days.forEach(k=>{
+    const D=dayData(k);
+    const used = D.ns||D.energy||(D.todos||[]).some(t=>t.t.trim())||(D.did||[]).length||(D.glim||[]).length;
+    if(used) v.log++;
+    v.out += (D.out||[]).length;
+    v.frus += (D.notself||[]).filter(x=>x.type==="좌절").length;
+    if((D.ck.day||[]).includes(0)) v.burn++;
+    if(D.ns==="안전") v.safe++;
+    if(D.energy==="하" && used && !(D.todos||[]).some(t=>t.t.trim())) v.rest++;
+    if((D.glim||[]).length) v.glim++;
+  });
+  const rows = DASH.map(m=>{
+    const n=v[m.k], hit = m.low ? n<=m.g : n>=m.g;
+    const pct = Math.min(100, m.low ? (n?Math.min(100,n/(m.g*2)*100):0) : n/m.g*100);
+    const c = m.low ? (hit?"var(--sage)":"var(--burg)") : (hit?"var(--sage)":"var(--mustard)");
+    return '<div class="dashrow'+(m.key?" key":"")+'"><div class="dn">'+m.n+'</div>'
+      +'<div class="db"><i style="width:'+pct+'%;background:'+c+'"></i></div>'
+      +'<div class="dv" style="color:'+c+'">'+n+'</div>'
+      +'<div class="dw">'+m.w+'</div></div>';
+  }).join("");
+  let msg="";
+  if(v.safe < 5) msg='<b style="color:var(--burg)">신경계 안전모드일이 '+v.safe+'일이야. 나머지 전부 무시하고 그것부터.</b>';
+  else if(v.rest === 0) msg='<b style="color:var(--burg)">죄책감 없이 쉰 날이 0이야. 다른 숫자가 아무리 좋아도 실패한 주야.</b>';
+  else if(v.out === 0) msg='출시가 0이야. 만든 건 있는데 나간 게 없다면 그건 전부 <b>재고</b>야.';
+  else msg='정렬돼 있어. 이번 주는 이대로.';
+  el.innerHTML='<div class="card"><span class="lab">최근 7일</span>'+rows
+    +'<div style="margin-top:13px;padding-top:11px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink2)">'+msg+'</div></div>';
+}
 function renderStStatus(){
   const el = document.getElementById("stStatus"); if(!el) return;
   let keyN = 0;
@@ -2424,12 +2634,12 @@ document.getElementById("impBtn").onclick = ()=>{
   Object.entries(sanctuary).forEach(([k,val])=>{ const el=document.getElementById(k); if(el) el.value=val; });
   if(!cycle.starts || !cycle.starts.length) cycle = {starts:["2026-06-26","2026-07-23"], len:27};
   renderToday(); renderIdeas(); renderSyncs(); renderCyc(); renderPhase();
-  renderCal(); renderDecl(); renderRel(); renderRit(); renderBium(); renderKeep(); relSetup(); renderStStatus();
+  renderCal(); renderDecl(); renderRel(); renderRit(); renderBium(); renderKeep(); relSetup(); renderDash(); renderStStatus();
   selDay = keyOf(new Date()); renderDayDetail(); renderCal();
   buildFolds();
   renderWarn();
   ready = true;
-  setState(hasStore ? "v2.5 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
+  setState(hasStore ? "v2.7 · "+STORE_LABEL : "⚠ 임시 모드 — 새로고침 시 사라짐", hasStore?"var(--ink3)":"var(--burg)");
 })();
 </script>
 </body>
